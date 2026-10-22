@@ -25,7 +25,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
+INTERNAL_IPS = ["127.0.0.1"]
 
 ALLOWED_HOSTS = [".vercel.app", "localhost", "127.0.0.1"]
 
@@ -118,7 +119,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.1/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / 'static']
+STATICFILES_DIRS = []
 
 # Email
 # https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration
