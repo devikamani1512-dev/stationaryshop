@@ -31,6 +31,10 @@ INTERNAL_IPS = ["127.0.0.1"]
 
 ALLOWED_HOSTS = [".vercel.app", "localhost", "127.0.0.1"]
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://stationaryshop-hazel.vercel.app",
+]
+
 
 # Application definition
 
