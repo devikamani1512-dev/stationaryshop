@@ -1,0 +1,204 @@
+
+/* ===== Supplyhive Profile Dropdown ===== */
+
+
+.profile-menu {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    vertical-align: middle;
+}
+
+
+/* Attractive Blue Profile Button */
+
+.profile-btn {
+    width: 100px;
+    height: 150px;
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    margin: 0;
+    border: 2px solid #dce9ff;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #438cff, #1455d9);
+    color: #ffffff;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(36, 99, 235, 0.25);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    flex-shrink: 0;
+}
+
+
+.profile-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(36, 99, 235, 0.35);
+}
+
+.profile-btn:focus-visible {
+    outline: 3px solid #93baff;
+    outline-offset: 3px;
+}
+
+/* Profile User Icon */
+.profile-btn svg {
+    display: block;
+    width: 50px;
+    height: 50px;
+}
+
+.profile-btn svg circle,
+.profile-btn svg path {
+    stroke: #ffffff;
+    stroke-width: 1.8;
+}
+
+/* Dropdown Arrow */
+.profile-arrow {
+    display: inline-block;
+    margin-left: 1px;
+    color: #001a4d;
+    font-size: 25px;
+    font-weight: 700;
+    line-height: 1;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.profile-btn[aria-expanded="true"] .profile-arrow {
+    transform: rotate(180deg);
+}
+
+/* Dropdown Container */
+.profile-dropdown {
+    position: absolute;
+    top: calc(100% + 12px);
+    right: 0;
+    width: 245px;
+    padding: 8px;
+    background: #ffffff;
+    border: 1px solid #e5eaf2;
+    border-radius: 14px;
+    box-shadow: 0 10px 30px rgba(0, 26, 77, 0.16);
+    z-index: 1000;
+    animation: profileDropdownOpen 0.18s ease-out;
+}
+
+/* Hide Dropdown When Closed */
+.profile-dropdown[hidden] {
+    display: none !important;
+}
+
+/* Dropdown Links */
+.profile-dropdown a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    color: #001a4d;
+    font-size: 16px;
+    font-weight: 500;
+    text-decoration: none;
+    border-radius: 9px;
+    transition: background 0.2s ease,
+                color 0.2s ease,
+                padding-left 0.2s ease;
+}
+
+.profile-dropdown a:hover {
+    background: #edf3ff;
+    color: #2463eb;
+    padding-left: 18px;
+}
+
+/* Keyboard Focus */
+.profile-dropdown a:focus-visible {
+    outline: 2px solid #2463eb;
+    outline-offset: -2px;
+}
+
+/* Dropdown Animation */
+@keyframes profileDropdownOpen {
+    from {
+        opacity: 0;
+        transform: translateY(-6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 600px) {
+    .profile-btn {
+        width: 40px;
+        height: 40px;
+    }
+
+    .profile-btn svg {
+        width: 25px;
+        height: 25px;
+    }
+
+    .profile-dropdown {
+        right: -5px;
+        width: 220px;
+    }
+}
+
+/* Reduced Motion Accessibility */
+@media (prefers-reduced-motion: reduce) {
+    .profile-btn,
+    .profile-arrow,
+    .profile-dropdown a {
+        transition: none;
+    }
+
+    .profile-dropdown {
+        animation: none;
+    }
+}
+
+/* ===== Profile Dropdown Logout Button ===== */
+
+.profile-dropdown form {
+    display: block;
+    margin: 0;
+    padding: 0;
+}
+
+.profile-dropdown .profile-logout-btn {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    padding: 12px 14px;
+    margin: 0;
+    border: none;
+    border-radius: 9px;
+    background: transparent;
+    color: #c92020;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    text-align: left;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.profile-dropdown .profile-logout-btn:hover {
+    background: #fff0f0;
+    color: #a31515;
+}
+
+.profile-dropdown .profile-logout-btn:focus-visible {
+    outline: 2px solid #c92020;
+    outline-offset: -2px;
+}
+

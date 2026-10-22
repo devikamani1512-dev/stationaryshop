@@ -1,0 +1,558 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - Supplyhive</title>
+
+    <link rel="stylesheet" href="{% static 'shop/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'shop/css/shop.css' %}">
+    <link rel="stylesheet" href="{% static 'shop/css/checkout.css' %}">
+    <link rel="stylesheet" href="{% static 'shop/css/profile_dropdown.css' %}">
+    <style>
+    .checkout-page .order-progress {
+        max-width: 1200px;
+        margin: 0 auto 28px;
+        padding: 25px 20px;
+        background: #fff;
+        border: 1px solid #e0e7f1;
+        border-radius: 16px;
+        box-shadow: 0 5px 20px rgba(23,55,108,.06);
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        position: relative;
+        box-sizing: border-box;
+    }
+
+    .checkout-page .progress-track {
+        position: absolute;
+        top: 43px;
+        left: 10%;
+        right: 10%;
+        height: 3px;
+        background: #dce5f3;
+    }
+
+    .checkout-page .progress-fill {
+        width: 0;
+        height: 100%;
+        background: #2463eb;
+    }
+
+    .checkout-page .progress-step {
+        flex: 1;
+        min-width: 0;
+        position: relative;
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        text-align: center;
+        color: #64748b;
+        font-size: 13px;
+    }
+
+    .checkout-page .step-circle {
+        width: 38px;
+        height: 38px;
+        flex-shrink: 0;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #e8eef8;
+        border: 3px solid white;
+        box-shadow: 0 0 0 1px #dce5f3;
+        font-weight: 700;
+    }
+
+    .checkout-page .progress-step.active .step-circle,
+    .checkout-page .progress-step.completed .step-circle {
+        background: #2463eb;
+        color: white;
+        box-shadow: 0 0 0 1px #2463eb;
+    }
+
+    .checkout-page .progress-step.active span,
+    .checkout-page .progress-step.completed span {
+        color: #17376c;
+        font-weight: 700;
+    }
+
+    @media (max-width: 600px) {
+        .checkout-page .order-progress {
+            padding: 20px 5px;
+        }
+
+        .checkout-page .progress-step {
+            font-size: 10px;
+            gap: 8px;
+        }
+
+        .checkout-page .step-circle {
+            width: 30px;
+            height: 30px;
+            font-size: 12px;
+        }
+
+        .checkout-page .progress-track {
+            top: 35px;
+        }
+    }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+
+<header class="site-header">
+    <div class="logo">
+        <img src="{% static 'shop/images/supplyhive_logo.png' %}"
+             alt="Supplyhive Logo">
+        <span>Supplyhive</span>
+    </div>
+
+    <nav class="navbar">
+        <a href="{% url 'home' %}">Home</a>
+        <a href="{% url 'shop_page' %}">Shop</a>
+        <a href="{% url 'about' %}">About us</a>
+        <a href="{% url 'contact' %}">Contact</a>
+        <a href="{% url 'login' %}">Login/Register</a>
+    </nav>
+
+    <form class="search-box" action="#products">
+        <input type="search"
+               placeholder="Search for Stationery"
+               aria-label="Search for stationery">
+        <button type="submit" aria-label="Search">⌕</button>
+    </form>
+
+    <div class="header-icons">
+        <a href="{% url 'cart' %}"
+   aria-label="Shopping cart"
+   class="icon-link cart-icon-link">
+    <img src="{% static 'shop/images/cart.jpeg' %}"
+         alt="Shopping Cart"
+         class="cart-image">
+    <span id="cart-count">0</span>
+</a>
+<div class="profile-menu">
+    <button type="button"
+            class="icon-link profile-btn"
+            id="profile-toggle"
+            aria-label="My account"
+            aria-expanded="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="8" r="3.5" fill="none"
+                    stroke="currentColor" stroke-width="1.7"/>
+            <path d="M5 20c.5-4 3-6 7-6s6.5 2 7 6"
+                  fill="none" stroke="currentColor" stroke-width="1.7"
+                  stroke-linecap="round"/>
+        </svg>
+    </button>
+
+<div class="profile-dropdown" id="profile-dropdown" hidden>
+
+    {% if request.user.is_authenticated %}
+        <div class="profile-user-info">
+            <strong>{{ request.user.username }}</strong>
+            <small>{{ request.user.email }}</small>
+        </div>
+
+        <a href="{% url 'my_account' %}">My Account</a>
+        <a href="{% url 'my_orders' %}">My Orders</a>
+       <a href="{% url 'my_orders' %}">Track My Order</a>
+        <a href="{% url 'my_addresses' %}">My Addresses</a>
+
+        <div class="profile-dropdown-divider"></div>
+
+        <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit" class="profile-logout-btn">
+                Logout
+            </button>
+        </form>
+
+    {% else %}
+        <a href="{% url 'login' %}">Login / Register</a>
+    {% endif %}
+
+</div>
+
+</div>
+  
+</div>
+
+</header>
+
+
+<main>
+
+<!-- CHECKOUT -->
+<main class="checkout-page">
+    
+<!-- Checkout Progress Bar -->
+
+<!-- Supplyhive Order Progress -->
+<section class="order-progress">
+    <div class="progress-track">
+        <div class="progress-fill"></div>
+    </div>
+
+    <div class="progress-step active">
+        <div class="step-circle">1</div>
+        <span>Checkout</span>
+    </div>
+
+    <div class="progress-step">
+        <div class="step-circle">2</div>
+        <span>Payment Details</span>
+    </div>
+
+    <div class="progress-step">
+        <div class="step-circle">3</div>
+        <span>Order Confirmation</span>
+    </div>
+
+    <div class="progress-step">
+        <div class="step-circle">4</div>
+        <span>Bill Download</span>
+    </div>
+
+    <div class="progress-step">
+        <div class="step-circle">5</div>
+        <span>Order Tracking</span>
+    </div>
+</section>
+
+    <div class="checkout-heading">
+        <h1>Checkout</h1>
+        <p>Complete your delivery details and review your order.</p>
+    </div>
+
+    <div class="checkout-layout">
+
+        <!-- CUSTOMER DETAILS -->
+        <section class="checkout-card">
+            <h2>Delivery Details</h2>
+
+            <form method="post" id="checkout-form">
+                {% csrf_token %}
+                <input type="hidden" name="buy_now" id="buy-now-flag" value="">
+<input type="hidden" name="buy_now_product" id="buy-now-product" value="">
+
+                <div class="checkout-form-grid">
+                    <div class="checkout-field full-width">
+                        <label for="full_name">Full Name</label>
+                        <input type="text" id="full_name"
+                               name="full_name" required>
+                    </div>
+
+                    <div class="checkout-field">
+                        <label for="phone">Mobile Number</label>
+                        <input type="tel" id="phone" name="phone"
+                               pattern="[0-9]{10}"
+                               maxlength="10" inputmode="numeric" required>
+                    </div>
+
+                    <div class="checkout-field">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+
+                    <div class="checkout-field full-width">
+                        <label for="address">Delivery Address</label>
+                        <textarea id="address" name="address"
+                                  rows="3" required></textarea>
+                    </div>
+
+                    <div class="checkout-field">
+                        <label for="city">City</label>
+                        <input type="text" id="city" name="city" required>
+                    </div>
+
+                    <div class="checkout-field">
+                        <label for="state">State</label>
+                        <input type="text" id="state" name="state"
+                               value="Tamil Nadu" required>
+                    </div>
+
+                    <div class="checkout-field">
+                        <label for="pincode">Pincode</label>
+                        <input type="text" id="pincode" name="pincode"
+                               pattern="[0-9]{6}" maxlength="6"
+                               inputmode="numeric" required>
+                    </div>
+                </div>
+
+                <p class="checkout-note">
+                    Please check your delivery details before continuing.
+                </p>
+
+                <button type="submit" class="checkout-submit">
+                    Continue to Payment
+                </button>
+            </form>
+        </section>
+
+        <!-- ORDER SUMMARY -->
+        <aside class="checkout-card order-summary">
+            <h2>Order Summary</h2>
+            <p id="checkout-item-count" class="summary-subtitle">
+                Your selected products
+            </p>
+
+            <div id="checkout-products"></div>
+
+            <div id="checkout-empty" hidden>
+                <p>Your cart is empty.</p>
+                <a href="{% url 'shop_page' %}" class="continue-shopping">
+                    Continue Shopping
+                </a>
+            </div>
+
+            <div class="summary-total-row">
+                <span>Subtotal</span>
+                <span id="checkout-subtotal">₹0.00</span>
+            </div>
+
+            <div class="summary-total-row">
+                <span>Delivery</span>
+                <span id="checkout-delivery">Calculated at next step</span>
+            </div>
+
+            <div class="summary-total-row grand-total">
+                <strong>Total</strong>
+                <strong id="checkout-total">₹0.00</strong>
+            </div>
+
+            <p class="secure-note">
+                Your order total is based on the items currently in your cart.
+            </p>
+        </aside>
+
+    </div>
+</main>
+
+<!-- FOOTER -->
+<footer class="site-footer" id="contact">
+    <div class="footer-brand">
+        <img src="{% static 'shop/images/supplyhive_logo.png' %}"
+             alt="Supplyhive Logo" class="footer-logo">
+        <div>
+            <h3>Supplyhive</h3>
+            <p>2025 Supplyhive Limited</p>
+        </div>
+    </div>
+
+    <div class="footer-links">
+        <div class="footer-column">
+            <h4>Company</h4>
+            <a href="{% url 'about' %}">About us</a>
+            <a href="#corporate">Supplyhive corporate</a>
+            <a href="#careers">Careers</a>
+            <a href="#team">Team</a>
+        </div>
+
+        <div class="footer-column">
+            <h4>Contact us</h4>
+            <a href="{% url 'contact' %}">Help &amp; Support</a>
+            <a href="#partner">Partner with us</a>
+        </div>
+
+        <div class="footer-column">
+            <h4>Available in</h4>
+            <a href="#coimbatore">Coimbatore</a>
+            <a href="#bengaluru">Bengaluru</a>
+            <a href="#chennai">Chennai</a>
+            <a href="#kolkata">Kolkata</a>
+        </div>
+
+        <div class="footer-column">
+            <h4>Legal</h4>
+            <a href="#terms">Terms &amp; Conditions</a>
+            <a href="#cookies">Cookie policy</a>
+            <a href="#privacy">Privacy Policy</a>
+        </div>
+
+        <div class="footer-column">
+            <h4>Information</h4>
+            <a href="#location">Location</a>
+            <a href="#email">Email</a>
+            <span>Social Media</span>
+
+            <div class="footer-socials">
+                <a href="#instagram" aria-label="Instagram">
+                    <img src="{% static 'shop/images/icon-instagram.png' %}"
+                         alt="Instagram">
+                </a>
+                <a href="#facebook" aria-label="Facebook">
+                    <img src="{% static 'shop/images/icon-facebook.png' %}"
+                         alt="Facebook">
+                </a>
+                <a href="#whatsapp" aria-label="WhatsApp">
+                    <img src="{% static 'shop/images/icon-whatsapp.png' %}"
+                         alt="WhatsApp">
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-app">
+        <p>For better experience, download the app now</p>
+        <div class="footer-app-buttons">
+            <a href="#google-play" class="app-button">
+                <img src="{% static 'shop/images/google-play.png' %}"
+                     alt="Google Play" class="app-store-icon">
+                <span>Get it on<br><strong>Google Play</strong></span>
+            </a>
+            <a href="#app-store" class="app-button">
+                <img src="{% static 'shop/images/app-store.png' %}"
+                     alt="App Store" class="app-store-icon">
+                <span>Download on the<br><strong>App Store</strong></span>
+            </a>
+        </div>
+    </div>
+</footer>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    let cart = [];
+
+try {
+    const selectedProduct = sessionStorage.getItem(
+        "supplyhive_selected_product"
+    );
+
+    if (selectedProduct) {
+    const product = JSON.parse(selectedProduct);
+    cart = product ? [product] : [];
+
+    document.getElementById("buy-now-flag").value = "true";
+    document.getElementById("buy-now-product").value =
+        JSON.stringify(cart);
+} else {
+    cart = JSON.parse(
+        localStorage.getItem("supplyhive_cart") || "[]"
+    );
+
+    document.getElementById("buy-now-flag").value = "false";
+}
+
+    if (!Array.isArray(cart)) {
+        cart = [];
+    }
+} catch (error) {
+    console.error("Checkout cart error:", error);
+    cart = [];
+}
+
+    const productsContainer = document.getElementById("checkout-products");
+    const emptyMessage = document.getElementById("checkout-empty");
+
+    let subtotal = 0;
+    let itemCount = 0;
+
+    cart.forEach(function (item) {
+        const price = Number(item.price) || 0;
+        const quantity = Number(item.quantity) || 0;
+
+        if (quantity <= 0) return;
+
+        subtotal += price * quantity;
+        itemCount += quantity;
+
+        const productRow = document.createElement("div");
+        productRow.className = "checkout-product";
+
+        const image = document.createElement("img");
+        image.src = item.image || "";
+        image.alt = item.name || "Stationery product";
+        image.className = "checkout-product-image";
+
+        const details = document.createElement("div");
+        details.className = "checkout-product-details";
+
+        const name = document.createElement("h3");
+        name.textContent = item.name || "Stationery Product";
+
+        const quantityText = document.createElement("p");
+        quantityText.textContent = "Qty: " + quantity;
+
+        const priceText = document.createElement("strong");
+        priceText.textContent =
+            "₹" + (price * quantity).toLocaleString("en-IN",
+            {minimumFractionDigits: 2, maximumFractionDigits: 2});
+
+        details.append(name, quantityText, priceText);
+        productRow.append(image, details);
+        productsContainer.appendChild(productRow);
+    });
+
+    document.getElementById("checkout-item-count").textContent =
+        itemCount + (itemCount === 1 ? " item" : " items");
+
+    document.getElementById("checkout-subtotal").textContent =
+        "₹" + subtotal.toLocaleString("en-IN",
+        {minimumFractionDigits: 2, maximumFractionDigits: 2});
+
+    document.getElementById("checkout-total").textContent =
+        "₹" + subtotal.toLocaleString("en-IN",
+        {minimumFractionDigits: 2, maximumFractionDigits: 2});
+
+    // Header cart count should show the full cart quantity
+const fullCart = JSON.parse(
+    localStorage.getItem("supplyhive_cart") || "[]"
+);
+
+const fullCartCount = fullCart.reduce(function (sum, item) {
+    return sum + (Number(item.quantity) || 0);
+}, 0);
+
+document.getElementById("cart-count").textContent = fullCartCount;
+document.getElementById("cart-count").style.display =
+    fullCartCount > 0 ? "inline-block" : "none";
+
+    if (itemCount === 0) {
+        emptyMessage.hidden = false;
+        document.getElementById("checkout-form").querySelector(
+            'button[type="submit"]'
+        ).disabled = true;
+    }
+});
+</script>
+{% if show_login_success %}
+<script>
+    alert("Login successful! Welcome to Supplyhive.");
+</script>
+{% endif %}
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const profileToggle = document.getElementById("profile-toggle");
+    const profileDropdown = document.getElementById("profile-dropdown");
+
+    if (!profileToggle || !profileDropdown) return;
+
+    profileToggle.addEventListener("click", function (event) {
+        event.stopPropagation();
+
+        const isOpening = profileDropdown.hidden;
+        profileDropdown.hidden = !isOpening;
+
+        profileToggle.setAttribute("aria-expanded", String(isOpening));
+    });
+
+    document.addEventListener("click", function (event) {
+        if (!event.target.closest(".profile-menu")) {
+            profileDropdown.hidden = true;
+            profileToggle.setAttribute("aria-expanded", "false");
+        }
+    });
+});
+</script>
+</body>
+</html>

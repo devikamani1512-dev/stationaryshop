@@ -1,0 +1,335 @@
+
+/* LOGIN PAGE */
+.login-page {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 24px 5% 0;
+    background: #d5e1f8;
+    min-height: 650px;
+}
+
+/* HERO IMAGE */
+.login-hero {
+    width: 100%;
+    height: 360px;
+    overflow: hidden;
+    border-radius: 12px;
+}
+
+.login-hero img {
+    display: block;
+    width: 150%;
+    height: 250%;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 12px;
+}
+
+/* PAGE TITLE */
+.login-title {
+    text-align: center;
+    font-size: 35px;
+    font-weight: 400;
+    line-height: 1.5;
+    margin: 36px 0 54px;
+    color: #111;
+}
+
+/* SIGNUP CARD */
+.signup-card {
+    width: 468px;
+    max-width: 100%;
+    box-sizing: border-box;
+    margin: 0 auto;
+    padding: 6px 14px 18px;
+    background: #fff;
+    border: 1px solid #777;
+    border-radius: 13px;
+}
+
+/* SIGNIN HEADING */
+.signup-card h2 {
+    text-align: center;
+    font-size: 27px;
+    font-weight: 400;
+    margin: 0 0 38px;
+    color: #111;
+}
+
+/* TWO-COLUMN FORM */
+.signup-form {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 36px 60px;
+    align-items: center;
+    padding: 0;
+}
+
+.signup-field {
+    width: 100%;
+    min-width: 0;
+}
+
+.signup-field input {
+    width: 100%;
+    height: 53px;
+    box-sizing: border-box;
+    padding: 10px;
+    border: 1px solid #555;
+    border-radius: 14px;
+    background: #79adef;
+    color: #111;
+    font-family: inherit;
+    font-size: 14px;
+    text-align: center;
+    outline: none;
+}
+
+.signup-field input::placeholder {
+    color: #111;
+    opacity: 1;
+    text-align: center;
+}
+
+.signup-field input:focus {
+    border-color: #087cf5;
+    box-shadow: 0 0 0 2px rgba(8, 124, 245, 0.15);
+}
+
+/* SUBMIT BUTTON */
+.signup-submit {
+    grid-column: 1 / -1;
+    justify-self: center;
+    min-width: 130px;
+    padding: 10px 20px;
+    border: 1px solid #111;
+    border-radius: 14px;
+    background: #087cf5;
+    color: #fff;
+    font-family: inherit;
+    font-size: 19px;
+    cursor: pointer;
+}
+
+.signup-submit:hover {
+    background: #0568d2;
+    font-size: 19px;
+}
+
+/* TABLET */
+@media (max-width: 900px) {
+    .login-page {
+        padding: 20px 4% 0;
+    }
+
+    .login-hero {
+        height: 300px;
+    }
+
+    .login-title {
+        font-size: 25px;
+        margin: 30px 0 40px;
+    }
+
+    .signup-form {
+        column-gap: 35px;
+    }
+}
+
+/* MOBILE */
+@media (max-width: 600px) {
+    .login-page {
+        padding: 16px 15px 40px;
+        min-height: auto;
+    }
+
+    .login-hero {
+        height: 220px;
+    }
+
+    .login-title {
+        font-size: 20px;
+        line-height: 1.5;
+        margin: 25px 0 32px;
+    }
+
+    .signup-card {
+        width: 100%;
+        max-width: 420px;
+        padding: 16px;
+    }
+
+    .signup-card h2 {
+        margin-bottom: 25px;
+    }
+
+    .signup-form {
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
+
+    .signup-field input {
+        height: 46px;
+    }
+
+    .signup-submit {
+        grid-column: 1;
+        margin-top: 2px;
+    }
+}
+/* SIGN IN / SIGN UP TABS */
+
+/* SIGN IN / SIGN UP TABS */
+.auth-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin: 0 0 28px;
+}
+
+.auth-tab {
+    min-width: 100px;
+    padding: 10px 20px;
+    border: 1px solid #c4d5f2;
+    border-radius: 22px;
+    background: #e8f0fc;
+    color: #001a4d;
+    font-family: inherit;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.auth-tab.active {
+    background: #087cf5;
+    color: #fff;
+    border-color: #087cf5;
+}
+
+.auth-tab:hover {
+    background: #0568d2;
+    color: #fff;
+}
+
+/* FORM LAYOUT */
+.signup-form {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px 30px;
+}
+
+.signup-field[hidden],
+[hidden] {
+    display: none !important;
+}
+
+.signup-field input {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* FORGOT PASSWORD */
+.forgot-password {
+    grid-column: 1 / -1;
+    justify-self: end;
+    color: #087cf5;
+    font-size: 13px;
+    text-decoration: none;
+    margin-top: -5px;
+}
+
+.forgot-password:hover {
+    text-decoration: underline;
+}
+
+/* MAIN BUTTON */
+.signup-submit {
+    grid-column: 1 / -1;
+    justify-self: stretch;
+    width: 100%;
+    min-height: 48px;
+    border: none;
+    border-radius: 12px;
+    background: #087cf5;
+    color: white;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.signup-submit:hover {
+    background: #0568d2;
+}
+
+/* SWITCH BETWEEN LOGIN AND SIGNUP */
+.auth-switch-text {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: #65748b;
+    font-size: 13px;
+    margin: 4px 0 0;
+}
+
+.auth-switch-text button {
+    border: none;
+    background: transparent;
+    color: #087cf5;
+    font-family: inherit;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.auth-switch-text button:hover {
+    text-decoration: underline;
+}
+
+/* MOBILE */
+@media (max-width: 600px) {
+    .signup-form {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .signup-form .signup-field,
+    .signup-form .forgot-password,
+    .signup-form .signup-submit,
+    .signup-form .auth-switch-text {
+        grid-column: 1;
+    }
+
+    .auth-tabs {
+        margin-bottom: 24px;
+    }
+}
+/* FINAL SIGN IN / SIGN UP BUTTON DESIGN */
+.auth-tabs {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 12px !important;
+    margin: 0 0 28px !important;
+}
+
+.auth-tabs .auth-tab {
+    display: inline-block !important;
+    min-width: 100px !important;
+    padding: 10px 20px !important;
+    border: 1px solid #087cf5 !important;
+    border-radius: 22px !important;
+    background: #e8f0fc !important;
+    color: #001a4d !important;
+    font-family: inherit !important;
+    font-size: 14px !important;
+    cursor: pointer !important;
+}
+
+.auth-tabs .auth-tab.active {
+    background: #087cf5 !important;
+    color: #fff !important;
+}
+
+.auth-tabs .auth-tab:hover {
+    background: #0568d2 !important;
+    color: #fff !important;
+}

@@ -1,0 +1,416 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track Your Order - Supplyhive</title>
+
+    <link rel="stylesheet" href="{% static 'shop/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'shop/css/shop.css' %}">
+    <link rel="stylesheet" href="{% static 'shop/css/order_tracking.css' %}">
+</head>
+
+<body>
+<main class="tracking-container">
+
+    <!-- Tracking Banner -->
+    <header class="tracking-banner">
+        <div class="banner-content">
+            <h1>Track Your Order</h1>
+            <p>Here is the latest status of your order.</p>
+        </div>
+
+        <div class="banner-truck">
+            <img
+                src="{% static 'shop/images/truckimage.png' %}"
+                alt="Supplyhive Delivery Truck"
+                class="tracking-truck-banner">
+        </div>
+    </header>
+
+    {% with status=order.delivery_status %}
+
+    <!-- Progress Bar -->
+    <section class="progress-section">
+
+        <div class="progress-step completed">
+            <div class="step-circle">✓</div>
+            <div class="step-title">1. Checkout</div>
+            <div class="step-description">Delivery address submitted</div>
+            <span class="step-badge">Completed</span>
+        </div>
+
+        <div class="progress-step completed">
+            <div class="step-circle">✓</div>
+            <div class="step-title">2. Payment</div>
+            <div class="step-description">Payment details submitted</div>
+            <span class="step-badge">Completed</span>
+        </div>
+
+        <div class="progress-step completed">
+            <div class="step-circle">✓</div>
+            <div class="step-title">3. Order Confirmation</div>
+            <div class="step-description">Order received, PDF bill available</div>
+            <span class="step-badge">Completed</span>
+        </div>
+
+        <div class="progress-step {% if status == 'DELIVERED' %}completed{% else %}current{% endif %}">
+            <div class="step-circle">
+                {% if status == 'DELIVERED' %}✓{% else %}🚚{% endif %}
+            </div>
+
+            <div class="step-title">4. Order Tracking</div>
+
+            <div class="step-description">
+                {{ order.get_delivery_status_display }}
+            </div>
+
+            <span class="step-badge">
+                {% if status == 'DELIVERED' %}
+                    Completed
+                {% else %}
+                    In Progress
+                {% endif %}
+            </span>
+        </div>
+
+    </section>
+
+    <!-- Order Details -->
+    <section class="tracking-card">
+
+        <div class="card-heading">
+            <span class="heading-icon">📄</span>
+            <h2>Order Details</h2>
+
+            <div class="order-id-badge">
+                Order ID <strong>{{ order.order_id }}</strong>
+            </div>
+        </div>
+
+        <div class="order-info-grid">
+
+            <div class="order-info-item">
+                <div class="info-icon">📅</div>
+                <div>
+                    <div class="info-label">Order Date</div>
+                    <div class="info-value">
+                        {{ order.created_at|date:"d M Y, h:i A" }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="order-info-item">
+                <div class="info-icon">₹</div>
+                <div>
+                    <div class="info-label">Total Amount</div>
+                    <div class="info-value">
+                        ₹{{ order.total_amount|floatformat:2 }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="order-info-item">
+                <div class="info-icon">💳</div>
+                <div>
+                    <div class="info-label">Payment Method</div>
+                    <div class="info-value">
+                        {{ order.get_payment_method_display }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="order-info-item">
+                <div class="info-icon">✅</div>
+                <div>
+                    <div class="info-label">Payment Status</div>
+                    <div class="info-value payment-status">
+                        {% if order.payment_method == "COD" %}
+                            Pay on Delivery
+                        {% else %}
+                            Demo Only
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Delivery Status Timeline -->
+    <section class="delivery-card">
+        <h2 class="delivery-heading">🚚 Delivery Status</h2>
+
+        <div class="delivery-layout">
+
+            <div class="delivery-timeline">
+
+                <!-- 1. Order Confirmed -->
+                <div class="timeline-item {% if status == 'CONFIRMED' %}active{% elif status == 'PROCESSING' or status == 'SHIPPED' or status == 'OUT_FOR_DELIVERY' or status == 'DELIVERED' %}done{% endif %}">
+
+                    <div class="timeline-marker"></div>
+
+                    <div class="timeline-content">
+                        <strong>Order Confirmed</strong>
+                        <p>{{ order.created_at|date:"d M Y, h:i A" }}</p>
+                    </div>
+
+                    <span class="timeline-status">
+                        {% if status == 'CONFIRMED' %}
+                            In Progress
+                        {% else %}
+                            Completed
+                        {% endif %}
+                    </span>
+                </div>
+
+                <!-- 2. Processing -->
+                <div class="timeline-item {% if status == 'PROCESSING' %}active{% elif status == 'SHIPPED' or status == 'OUT_FOR_DELIVERY' or status == 'DELIVERED' %}done{% endif %}">
+
+                    <div class="timeline-marker"></div>
+
+                    <div class="timeline-content">
+                        <strong>Processing</strong>
+                        <p>Your order is being prepared</p>
+                    </div>
+
+                    <span class="timeline-status">
+                        {% if status == 'PROCESSING' %}
+                            In Progress
+                        {% elif status == 'SHIPPED' or status == 'OUT_FOR_DELIVERY' or status == 'DELIVERED' %}
+                            Completed
+                        {% else %}
+                            Pending
+                        {% endif %}
+                    </span>
+                </div>
+
+                <!-- 3. Shipped -->
+                <div class="timeline-item {% if status == 'SHIPPED' %}active{% elif status == 'OUT_FOR_DELIVERY' or status == 'DELIVERED' %}done{% endif %}">
+
+                    <div class="timeline-marker"></div>
+
+                    <div class="timeline-content">
+                        <strong>Shipped</strong>
+                        <p>Your order has been shipped</p>
+                    </div>
+
+                    <span class="timeline-status">
+                        {% if status == 'SHIPPED' %}
+                            In Progress
+                        {% elif status == 'OUT_FOR_DELIVERY' or status == 'DELIVERED' %}
+                            Completed
+                        {% else %}
+                            Pending
+                        {% endif %}
+                    </span>
+                </div>
+
+                <!-- 4. Out for Delivery -->
+                <div class="timeline-item {% if status == 'OUT_FOR_DELIVERY' %}active{% elif status == 'DELIVERED' %}done{% endif %}">
+
+                    <div class="timeline-marker"></div>
+
+                    <div class="timeline-content">
+                        <strong>Out for Delivery</strong>
+                        <p>Your order is on its way to you</p>
+                    </div>
+
+                    <span class="timeline-status">
+                        {% if status == 'OUT_FOR_DELIVERY' %}
+                            In Progress
+                        {% elif status == 'DELIVERED' %}
+                            Completed
+                        {% else %}
+                            Pending
+                        {% endif %}
+                    </span>
+                </div>
+
+                <!-- 5. Delivered -->
+                <div class="timeline-item {% if status == 'DELIVERED' %}done{% endif %}">
+
+                    <div class="timeline-marker"></div>
+
+                    <div class="timeline-content">
+                        <strong>Delivered</strong>
+
+                        <p>
+                            {% if status == 'DELIVERED' %}
+                                Your order has been delivered successfully!
+                            {% else %}
+                                Waiting for delivery
+                            {% endif %}
+                        </p>
+                    </div>
+
+                    <span class="timeline-status">
+                        {% if status == 'DELIVERED' %}
+                            Completed
+                        {% else %}
+                            Pending
+                        {% endif %}
+                    </span>
+                </div>
+
+            </div>
+
+            <!-- Supplyhive Truck -->
+            <div class="truck-illustration">
+                <div class="truck-scene">
+
+                    <img
+                        src="{% static 'shop/images/truckimage.png' %}"
+                        alt="Supplyhive Delivery Truck"
+                        class="tracking-truck-main">
+
+                    <p>
+                        {% if status == 'CONFIRMED' %}
+                            Order Confirmed
+                        {% elif status == 'PROCESSING' %}
+                            Preparing Your Order
+                        {% elif status == 'SHIPPED' %}
+                            Order Shipped
+                        {% elif status == 'OUT_FOR_DELIVERY' %}
+                            Out for Delivery
+                        {% elif status == 'DELIVERED' %}
+                            Order Delivered Successfully!
+                        {% endif %}
+                    </p>
+
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    {% endwith %}
+
+    <!-- Items in Order -->
+    <section class="tracking-card">
+
+        <div class="card-heading">
+            <span class="heading-icon">🛍️</span>
+            <h2>Items in This Order</h2>
+        </div>
+
+        <div class="products-table-wrap">
+            <table class="products-table">
+
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Quantity</th>
+                        <th>Unit Price</th>
+                        <th class="amount">Total</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for item in order.items.all %}
+                    <tr>
+                        <td class="product-name">{{ item.product_name }}</td>
+                        <td>{{ item.quantity }}</td>
+                        <td>₹{{ item.unit_price|floatformat:2 }}</td>
+                        <td class="amount">
+                            ₹{{ item.item_total|floatformat:2 }}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4">No products found for this order.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+
+                <tfoot>
+                    <tr>
+                        <td colspan="3" class="amount">Total Amount</td>
+                        <td class="amount grand-total">
+                            ₹{{ order.total_amount|floatformat:2 }}
+                        </td>
+                    </tr>
+                </tfoot>
+
+            </table>
+        </div>
+    </section>
+
+    <!-- Bottom Buttons -->
+    <div class="tracking-actions">
+
+        <a href="{% url 'shop_page' %}" class="tracking-btn back-btn">
+            ← Back to Shop
+        </a>
+
+        <a href="{% url 'contact' %}" class="tracking-btn support-btn">
+            ✉ Contact Support
+        </a>
+
+    </div>
+
+    <!-- Delivered Success Popup -->
+    {% if order.delivery_status == "DELIVERED" %}
+
+    <div class="delivery-success-overlay" id="deliverySuccessPopup">
+
+        <div class="delivery-success-modal"
+             role="dialog"
+             aria-modal="true"
+             aria-labelledby="deliverySuccessTitle">
+
+            <button
+                type="button"
+                class="success-close"
+                onclick="closeDeliveryPopup()"
+                aria-label="Close">
+                &times;
+            </button>
+
+            <div class="success-check">✓</div>
+
+            <h2 id="deliverySuccessTitle">
+                Order Delivered Successfully!
+            </h2>
+
+            <p class="success-message">
+                Your Supplyhive order has been delivered successfully.
+                Thank you for shopping with us!
+            </p>
+
+            <img
+                src="{% static 'shop/images/truckimage.png' %}"
+                alt="Supplyhive delivery truck"
+                class="success-truck">
+
+            <div class="success-notice">
+                <strong>✓ Your order has reached you!</strong>
+                <span>All tracking steps completed.</span>
+            </div>
+
+            <a href="{% url 'shop_page' %}" class="success-shop-btn">
+                🛍 Continue Shopping →
+            </a>
+
+        </div>
+    </div>
+
+    <script>
+        function closeDeliveryPopup() {
+            const popup = document.getElementById(
+                'deliverySuccessPopup'
+            );
+
+            if (popup) {
+                popup.style.display = 'none';
+            }
+        }
+    </script>
+
+    {% endif %}
+
+</main>
+</body>
+</html>

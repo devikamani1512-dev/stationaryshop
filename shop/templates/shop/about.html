@@ -1,0 +1,355 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Supplyhive</title>
+
+    <link rel="stylesheet" href="{% static 'shop/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'shop/css/about.css' %}">
+    <link rel="stylesheet" href="{% static 'shop/css/profile_dropdown.css' %}">
+</head>
+<body>
+
+    <!-- Navbar -->
+   <header class="site-header">
+    <div class="logo">
+        <img src="{% static 'shop/images/supplyhive_logo.png' %}"
+             alt="Supplyhive Logo">
+        <span>Supplyhive</span>
+    </div>
+
+    <nav class="navbar">
+        <a href="{% url 'home' %}">Home</a>
+        <a href="{% url 'shop_page' %}">Shop</a>
+        <a href="{% url 'about' %}">About us</a>
+        <a href="{% url 'contact' %}">Contact</a>
+        
+{% if request.user.is_authenticated %}
+    <a href="{% url 'my_orders' %}">My Orders</a>
+{% else %}
+    <a href="{% url 'login' %}">Login/Register</a>
+{% endif %}
+
+    </nav>
+
+    <form class="search-box" action="#products">
+        <input type="search"
+               placeholder="Search for Stationery"
+               aria-label="Search for stationery">
+        <button type="submit" aria-label="Search">⌕</button>
+    </form>
+
+    <div class="header-icons">
+        
+<a href="{% url 'cart' %}"
+   aria-label="Shopping cart"
+   class="icon-link cart-icon-link">
+
+    <img src="{% static 'shop/images/cart.jpeg' %}"
+         alt="Shopping Cart"
+         class="cart-image">
+
+    <span id="cart-count">0</span>
+</a>
+
+      
+<div class="profile-menu">
+    <button type="button"
+            class="icon-link profile-btn"
+            id="profile-toggle"
+            aria-label="My account"
+            aria-expanded="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="8" r="3.5" fill="none"
+                    stroke="currentColor" stroke-width="1.7"/>
+            <path d="M5 20c.5-4 3-6 7-6s6.5 2 7 6"
+                  fill="none" stroke="currentColor"
+                  stroke-width="1.7" stroke-linecap="round"/>
+        </svg>
+    </button>
+
+    <div class="profile-dropdown" id="profile-dropdown" hidden>
+        {% if request.user.is_authenticated %}
+            <div class="profile-user-info">
+                <strong>{{ request.user.username }}</strong>
+                <small>{{ request.user.email }}</small>
+            </div>
+
+            <a href="{% url 'my_account' %}">My Account</a>
+            <a href="{% url 'my_orders' %}">My Orders</a>
+            <a href="{% url 'my_orders' %}">Track My Order</a>
+            <a href="{% url 'my_addresses' %}">My Addresses</a>
+
+            <div class="profile-dropdown-divider"></div>
+
+            <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit" class="profile-logout-btn">
+                    Logout
+                </button>
+            </form>
+        {% else %}
+            <a href="{% url 'login' %}">Login / Register</a>
+        {% endif %}
+    </div>
+</div>
+
+    </div>
+</header>
+
+    <main class="about-page">
+
+        <!-- Hero Section -->
+        <section class="about-hero">
+            <img
+                src="{% static 'shop/images/about-hero.png' %}"
+                alt="Stationery and notebook"
+                class="about-hero-image"
+            >
+            <h1>"Smart Supplies for Bright Futures."</h1>
+        </section>
+
+        <!-- Introduction -->
+        <section class="about-intro">
+            <p>
+                We provide quality stationery and school supplies to support
+                learning, creativity, and organization. From classrooms to
+                home desks, we're here to help students and educators stay
+                prepared and inspired.
+            </p>
+
+            <div class="about-category-images">
+                <img src="{% static 'shop/images/about-cat-1.png' %}" alt="Notebook and stationery">
+                <img src="{% static 'shop/images/about-cat-2.png' %}" alt="Notebook and pens">
+                <img src="{% static 'shop/images/about-cat-3.png' %}" alt="Planner and pencils">
+            </div>
+        </section>
+
+        <!-- Pen and Pencil -->
+        <section class="about-product-section">
+            <h2>PEN &amp; PENCIL</h2>
+            <p>
+                At Supplyhive, we believe a great pen is more than just a
+                writing tool—it's an expression of thought, precision, and
+                personality. From smooth everyday ballpoints to elegant
+                signature pens, we offer reliable writing instruments
+                designed for comfort, style, and performance.
+            </p>
+
+            <div class="about-writing-images">
+                <img src="{% static 'shop/images/about-pens.png' %}" alt="Collection of pens">
+                <img src="{% static 'shop/images/about-pencils.png' %}" alt="Colourful pencils">
+            </div>
+        </section>
+
+        <!-- Bags -->
+        <section class="about-product-section">
+            <h2>BAGS</h2>
+
+            <div class="about-bags">
+                <img src="{% static 'shop/images/about-bag-black.png' %}" alt="Black office bag">
+                <img src="{% static 'shop/images/about-bag-brown.png' %}" alt="Brown leather bag">
+            </div>
+        </section>
+
+        <!-- All Stationery -->
+        <section class="about-product-section">
+            <h2>ALL STATIONERY</h2>
+            <p>
+                We offer a wide range of stationery essentials, from notebooks,
+                folders, and sticky notes to markers, staplers, and rulers.
+                Each item is chosen for quality, functionality, and style—
+                perfect for school, office, or creative use.
+            </p>
+
+            <div class="about-essentials">
+                <img src="{% static 'shop/images/about-pen-notepad.png' %}" alt="Pen and notepad">
+                <img src="{% static 'shop/images/about-sticky-note.png' %}" alt="Yellow sticky note">
+                <img src="{% static 'shop/images/about-stapler.png' %}" alt="Red stapler">
+            </div>
+        </section>
+
+        <!-- Team -->
+        <section class="about-team">
+            <h2>The Team</h2>
+            <p>
+                Our team is a dedicated group of professionals passionate
+                about delivering quality stationery in bulk with efficiency
+                and care. With expertise in sourcing, logistics, and customer
+                service, we ensure every order meets the highest standards.
+            </p>
+
+            <div class="about-team-grid">
+                <article class="about-team-card">
+                    <img src="{% static 'shop/images/about-cat-1.png' %}" alt="Team member">
+                    <h3>Seth Rollins</h3>
+                    <p>Shop Owner</p>
+                </article>
+
+                <article class="about-team-card">
+                    <img src="{% static 'shop/images/about-cat-2.png' %}" alt="Team member">
+                    <h3>Seth Rollins</h3>
+                    <p>Manager</p>
+                </article>
+
+                <article class="about-team-card">
+                    <img src="{% static 'shop/images/about-cat-3.png' %}" alt="Team member">
+                    <h3>Seth Rollins</h3>
+                    <p>Shop Keeper</p>
+                </article>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="about-footer" id="contact">
+        <div class="about-footer-brand">
+            <img src="{% static 'shop/images/supplyhive_logo.png' %}" alt="Supplyhive">
+            <div>
+                <h2>Supplyhive</h2>
+                <p>2025 Supplyhive Limited</p>
+            </div>
+        </div>
+
+        <div class="about-footer-links">
+            <div>
+                <h3>Company</h3>
+                <a href="#about">About us</a>
+                <a href="#company">Supplyhive corporate</a>
+                <a href="#careers">Careers</a>
+                <a href="#team">Team</a>
+            </div>
+
+            <div>
+                <h3>Contact us</h3>
+                <a href="#support">Help &amp; Support</a>
+                <a href="#partners">Partner with us</a>
+                <a href="#ride">Ride with us</a>
+            </div>
+
+            <div>
+                <h3>Available in</h3>
+                <a href="#coimbatore">Coimbatore</a>
+                <a href="#bengaluru">Bengaluru</a>
+                <a href="#chennai">Chennai</a>
+                <a href="#kolkata">Kolkata</a>
+            </div>
+
+            <div>
+                <h3>Legal</h3>
+                <a href="#terms">Terms &amp; Conditions</a>
+                <a href="#cookies">Cookie policy</a>
+                <a href="#privacy">Privacy Policy</a>
+            </div>
+
+            <div>
+                <h3>Information</h3>
+                <a href="#location">Location</a>
+                <a href="mailto:info@supplyhive.com">Email</a>
+                <span>Social Media</span>
+                      <div class="footer-socials">
+    <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+        <img src="{% static 'shop/images/icon-instagram.png' %}" alt="Instagram">
+    </a>
+
+    <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+        <img src="{% static 'shop/images/icon-facebook.png' %}" alt="Facebook">
+    </a>
+
+    <a href="https://www.whatsapp.com/" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
+        <img src="{% static 'shop/images/icon-whatsapp.png' %}" alt="WhatsApp">
+    </a>
+</div>
+            </div>
+        </div>
+
+        <div class="about-app-download">
+            <p>For better experience, download the app now</p>
+            <div class="footer-app-buttons">
+        <a href="#google-play" class="app-button">
+            <img
+                src="{% static 'shop/images/google-play.png' %}"
+                alt="Google Play"
+                class="app-store-icon"
+            >
+            <span>
+                Get it on<br>
+                <strong>Google Play</strong>
+            </span>
+        </a>
+
+        <a href="#app-store" class="app-button">
+            <img
+                src="{% static 'shop/images/app-store.png' %}"
+                alt="App Store"
+                class="app-store-icon"
+            >
+            <span>
+                Download on the<br>
+                <strong>App Store</strong>
+            </span>
+        </a>
+    </div>
+        </div>
+    </footer>
+
+<script>
+function updateCartCount() {
+    try {
+        const cart = JSON.parse(
+            localStorage.getItem("supplyhive_cart") || "[]"
+        );
+
+        const count = Array.isArray(cart)
+            ? cart.reduce(
+                (sum, item) => sum + (Number(item.quantity) || 0),
+                0
+            )
+            : 0;
+
+        const cartCount = document.getElementById("cart-count");
+
+        if (cartCount) {
+            cartCount.textContent = count;
+        }
+    } catch (error) {
+        console.error("Cart count error:", error);
+    }
+}
+
+document.addEventListener("DOMContentLoaded", updateCartCount);
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const profileToggle = document.getElementById("profile-toggle");
+    const profileDropdown = document.getElementById("profile-dropdown");
+
+    if (!profileToggle || !profileDropdown) return;
+
+    profileToggle.addEventListener("click", function (event) {
+        event.stopPropagation();
+
+        const isOpening = profileDropdown.hidden;
+        profileDropdown.hidden = !isOpening;
+
+        profileToggle.setAttribute("aria-expanded", String(isOpening));
+    });
+
+    document.addEventListener("click", function (event) {
+        if (!event.target.closest(".profile-menu")) {
+            profileDropdown.hidden = true;
+            profileToggle.setAttribute("aria-expanded", "false");
+        }
+    });
+});
+</script>
+</body>
+</html>
+
+</body>
+</html>

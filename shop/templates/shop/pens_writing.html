@@ -1,0 +1,567 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop - Supplyhive</title>
+
+    <link rel="stylesheet" href="{% static 'shop/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'shop/css/shop.css' %}">
+    <link rel="stylesheet" href="{% static 'shop/css/profile_dropdown.css' %}">
+</head>
+
+<body>
+
+<header class="site-header">
+    <div class="logo">
+        <img src="{% static 'shop/images/supplyhive_logo.png' %}"
+             alt="Supplyhive Logo">
+        <span>Supplyhive</span>
+    </div>
+
+    <nav class="navbar">
+        <a href="{% url 'home' %}">Home</a>
+        <a href="{% url 'shop_page' %}">Shop</a>
+        <a href="{% url 'about' %}">About us</a>
+        <a href="{% url 'contact' %}">Contact</a>
+        <a href="{% url 'login' %}">Login/Register</a>
+    </nav>
+
+    <form class="search-box" action="{% url 'global_product_search' %}" method="get">
+    <input type="search"
+           name="q"
+           placeholder="Search for Stationery"
+           aria-label="Search for stationery"
+           required>
+    <button type="submit" aria-label="Search">⌕</button>
+</form>
+
+    <div class="header-icons">
+        <a href="{% url 'cart' %}"
+   aria-label="Shopping cart"
+   class="icon-link cart-icon-link">
+
+    <img src="{% static 'shop/images/cart.jpeg' %}"
+         alt="Shopping Cart"
+         class="cart-image">
+
+    <span id="cart-count">0</span>
+</a>
+
+       
+<div class="profile-menu">
+    <button type="button"
+            class="icon-link profile-btn"
+            id="profile-toggle"
+            aria-label="My account"
+            aria-expanded="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="8" r="3.5" fill="none"
+                    stroke="currentColor" stroke-width="1.7"/>
+            <path d="M5 20c.5-4 3-6 7-6s6.5 2 7 6"
+                  fill="none" stroke="currentColor"
+                  stroke-width="1.7" stroke-linecap="round"/>
+        </svg>
+    </button>
+
+    <div class="profile-dropdown" id="profile-dropdown" hidden>
+        {% if request.user.is_authenticated %}
+            <div class="profile-user-info">
+                <strong>{{ request.user.username }}</strong>
+                <small>{{ request.user.email }}</small>
+            </div>
+
+            <a href="{% url 'my_account' %}">My Account</a>
+            <a href="{% url 'my_orders' %}">My Orders</a>
+            <a href="{% url 'my_orders' %}">Track My Order</a>
+            <a href="{% url 'my_addresses' %}">My Addresses</a>
+
+            <div class="profile-dropdown-divider"></div>
+
+            <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit" class="profile-logout-btn">
+                    Logout
+                </button>
+            </form>
+        {% else %}
+            <a href="{% url 'login' %}">Login / Register</a>
+        {% endif %}
+    </div>
+</div>
+
+</header>
+
+<main>
+
+    <!-- Shop Hero Banner -->
+    <section class="shop-hero container">
+        <img src="{% static 'shop/images/shop-hero-banner.png' %}"
+             alt="Stationery shop banner">
+
+        <h1>"Where Ideas Begin - Shop Smart, Stay Sharp!"</h1>
+    </section>
+  
+<!-- Shop Categories -->
+<div class="shop-toolbar">
+
+    <details class="category-dropdown">
+
+        <summary class="category-toggle">
+            <span>☰ Categories</span>
+            <span class="dropdown-arrow">⌄</span>
+        </summary>
+
+        <div class="category-panel">
+
+            <h3>Categories</h3>
+
+<div class="category-list">
+    <h3>Categories</h3>
+
+    <a href="{% url 'shop_page' %}#office-basics">
+        Office Basics
+    </a>
+
+    <a href="{% url 'files_folders' %}">
+        Files &amp; Folders
+    </a>
+
+    <a href="{% url 'paper_notebooks' %}">
+        Paper &amp; Notebooks
+    </a>
+
+    <a href="{% url 'pens_writing' %}">
+        Pens &amp; Writing
+    </a>
+
+    <a href="{% url 'school_supplies' %}">
+        School Supplies
+    </a>
+</div>
+
+        </div>
+
+        <div class="price-filter">
+            <h4>Filter by Price</h4>
+
+            <label>
+                <input type="checkbox" name="price" value="50-100">
+                Rs. 50-100
+            </label>
+
+            <label>
+                <input type="checkbox" name="price" value="100-200">
+                Rs. 100-200
+            </label>
+
+            <label>
+                <input type="checkbox" name="price" value="200-300">
+                Rs. 200-300
+            </label>
+
+            <label>
+                <input type="checkbox" name="price" value="300-500">
+                Rs. 300-500
+            </label>
+        </div>
+
+    </details>
+
+</div>
+
+    <!-- Products -->
+
+{% load static %}
+
+<section class="shop-products">
+
+    <h2>Pens &amp; Writing</h2>
+
+    <p class="results-count">
+        Showing Result 1-12 of 12 results
+    </p>
+
+    <div class="product-grid">
+
+    <div class="product-card">
+        <a href="{% url 'product_details' 'blue-pen' %}">
+            <img src="{% static 'shop/images/pen1.jpeg' %}" alt="Blue Pen">
+        </a>
+        <h3>Blue Pen</h3>
+        <div class="product-rating">★★★★★</div>
+        <p>Rs. 90</p>
+        <p>Buy 3 or more @ Rs. 101.20</p>
+        <button type="button">Add to Cart</button>
+    </div>
+
+    <div class="product-card">
+        <a href="{% url 'product_details' 'ball-pen' %}">
+            <img src="{% static 'shop/images/pen2.jpeg' %}" alt="Ball Pen">
+        </a>
+        <h3>Ball Pen</h3>
+        <div class="product-rating">★★★★★</div>
+        <p>Rs. 70</p>
+        <p>Buy 3 or more @ Rs. 101.20</p>
+        <button type="button">Add to Cart</button>
+    </div>
+
+    <div class="product-card">
+        <a href="{% url 'product_details' 'color-pen' %}">
+            <img src="{% static 'shop/images/pen3.jpeg' %}" alt="Color Pen">
+        </a>
+        <h3>Color Pen</h3>
+        <div class="product-rating">★★★★★</div>
+        <p>Rs. 80</p>
+        <p>Buy 3 or more @ Rs. 101.20</p>
+        <button type="button">Add to Cart</button>
+    </div>
+
+    <div class="product-card">
+        <a href="{% url 'product_details' 'gel-pen' %}">
+            <img src="{% static 'shop/images/pen4.jpeg' %}" alt="Gel Pen">
+        </a>
+        <h3>Gel Pen</h3>
+        <div class="product-rating">★★★★★</div>
+        <p>Rs. 90</p>
+        <p>Buy 3 or more @ Rs. 101.20</p>
+        <button type="button">Add to Cart</button>
+    </div>
+
+    <div class="product-card">
+        <a href="{% url 'product_details' 'writing-pen' %}">
+            <img src="{% static 'shop/images/pen5.jpeg' %}" alt="Writing Pen">
+        </a>
+        <h3>Writing Pen</h3>
+        <div class="product-rating">★★★★★</div>
+        <p>Rs. 60</p>
+        <p>Buy 3 or more @ Rs. 101.20</p>
+        <button type="button">Add to Cart</button>
+    </div>
+
+    <div class="product-card">
+        <a href="{% url 'product_details' 'premium-pen' %}">
+            <img src="{% static 'shop/images/pen6.jpeg' %}" alt="Premium Pen">
+        </a>
+        <h3>Premium Pen</h3>
+        <div class="product-rating">★★★★★</div>
+        <p>Rs. 200</p>
+        <p>Buy 3 or more @ Rs. 101.20</p>
+        <button type="button">Add to Cart</button>
+    </div>
+
+    <div class="product-card">
+        <a href="{% url 'product_details' 'pen-set-writing' %}">
+            <img src="{% static 'shop/images/pen7.jpeg' %}" alt="Pen Set">
+        </a>
+        <h3>Pen Set</h3>
+        <div class="product-rating">★★★★★</div>
+        <p>Rs. 80</p>
+        <p>Buy 3 or more @ Rs. 101.20</p>
+        <button type="button">Add to Cart</button>
+    </div>
+
+    <div class="product-card">
+        <a href="{% url 'product_details' 'sketch-pen' %}">
+            <img src="{% static 'shop/images/pen8.jpeg' %}" alt="Sketch Pen">
+        </a>
+        <h3>Sketch Pen</h3>
+        <div class="product-rating">★★★★★</div>
+        <p>Rs. 70</p>
+        <p>Buy 3 or more @ Rs. 101.20</p>
+        <button type="button">Add to Cart</button>
+    </div>
+
+    <div class="product-card">
+        <a href="{% url 'product_details' 'multicolor-pen' %}">
+            <img src="{% static 'shop/images/pen9.jpeg' %}" alt="Multicolor Pen">
+        </a>
+        <h3>Multicolor Pen</h3>
+        <div class="product-rating">★★★★★</div>
+        <p>Rs. 150</p>
+        <p>Buy 3 or more @ Rs. 101.20</p>
+        <button type="button">Add to Cart</button>
+    </div>
+
+    <div class="product-card">
+        <a href="{% url 'product_details' 'marker-pen' %}">
+            <img src="{% static 'shop/images/pen10.jpeg' %}" alt="Marker Pen">
+        </a>
+        <h3>Marker Pen</h3>
+        <div class="product-rating">★★★★★</div>
+        <p>Rs. 90</p>
+        <p>Buy 3 or more @ Rs. 101.20</p>
+        <button type="button">Add to Cart</button>
+    </div>
+
+    <div class="product-card">
+        <a href="{% url 'product_details' 'fine-tip-pen' %}">
+            <img src="{% static 'shop/images/pen11.jpeg' %}" alt="Fine Tip Pen">
+        </a>
+        <h3>Fine Tip Pen</h3>
+        <div class="product-rating">★★★★★</div>
+        <p>Rs. 120</p>
+        <p>Buy 3 or more @ Rs. 101.20</p>
+        <button type="button">Add to Cart</button>
+    </div>
+
+    <div class="product-card">
+        <a href="{% url 'product_details' 'pen-collection' %}">
+            <img src="{% static 'shop/images/pen12.jpeg' %}" alt="Pen Collection">
+        </a>
+        <h3>Pen Collection</h3>
+        <div class="product-rating">★★★★★</div>
+        <p>Rs. 100</p>
+        <p>Buy 3 or more @ Rs. 101.20</p>
+        <button type="button">Add to Cart</button>
+    </div>
+
+</div>
+</section>
+</main>
+<footer class="site-footer" id="contact">
+    <div class="footer-brand">
+        <img
+            src="{% static 'shop/images/supplyhive_logo.png' %}"
+            alt="Supplyhive Logo"
+            class="footer-logo"
+        >
+        <div>
+            <h3>Supplyhive</h3>
+            <p>2025 Supplyhive Limited</p>
+        </div>
+    </div>
+
+    <div class="footer-links">
+        <div class="footer-column">
+            <h4>Company</h4>
+            <a href="#about">About us</a>
+            <a href="#corporate">Supplyhive corporate</a>
+            <a href="#careers">Careers</a>
+            <a href="#team">Team</a>
+        </div>
+
+        <div class="footer-column">
+            <h4>Contact us</h4>
+            <a href="#support">Help &amp; Support</a>
+            <a href="#partner">Partner with us</a>
+            <a href="#ride">Ride with us</a>
+        </div>
+
+        <div class="footer-column">
+            <h4>Available in</h4>
+            <a href="#coimbatore">Coimbatore</a>
+            <a href="#bengaluru">Bengaluru</a>
+            <a href="#chennai">Chennai</a>
+            <a href="#kolkata">Kolkata</a>
+        </div>
+
+        <div class="footer-column">
+            <h4>Legal</h4>
+            <a href="#terms">Terms &amp; Conditions</a>
+            <a href="#cookies">Cookie policy</a>
+            <a href="#privacy">Privacy Policy</a>
+        </div>
+
+        <div class="footer-column">
+            <h4>Information</h4>
+            <a href="#location">Location</a>
+            <a href="#email">Email</a>
+            <span>Social Media</span>
+      <div class="footer-socials">
+    <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+        <img src="{% static 'shop/images/icon-instagram.png' %}" alt="Instagram">
+    </a>
+
+    <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+        <img src="{% static 'shop/images/icon-facebook.png' %}" alt="Facebook">
+    </a>
+
+    <a href="https://www.whatsapp.com/" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
+        <img src="{% static 'shop/images/icon-whatsapp.png' %}" alt="WhatsApp">
+    </a>
+</div>
+        </div>
+    </div>
+
+    
+
+<div class="footer-app">
+    <p>For better experience, download the app now</p>
+
+    <div class="footer-app-buttons">
+        <a href="#google-play" class="app-button">
+            <img
+                src="{% static 'shop/images/google-play.png' %}"
+                alt="Google Play"
+                class="app-store-icon"
+            >
+            <span>
+                Get it on<br>
+                <strong>Google Play</strong>
+            </span>
+        </a>
+
+        <a href="#app-store" class="app-button">
+            <img
+                src="{% static 'shop/images/app-store.png' %}"
+                alt="App Store"
+                class="app-store-icon"
+            >
+            <span>
+                Download on the<br>
+                <strong>App Store</strong>
+            </span>
+        </a>
+    </div>
+</div>
+
+    </div>
+</footer>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const priceCheckboxes = document.querySelectorAll(
+        '.price-filter input[name="price"]'
+    );
+
+    const products = document.querySelectorAll(".product-card");
+
+    function filterProducts() {
+        const selectedRanges = Array.from(priceCheckboxes)
+            .filter(checkbox => checkbox.checked)
+            .map(checkbox => checkbox.value);
+
+        products.forEach(product => {
+            const paragraphs = product.querySelectorAll("p");
+            let price = null;
+
+            paragraphs.forEach(p => {
+                const match = p.textContent.match(/Rs\.?\s*([\d,]+(?:\.\d+)?)/);
+
+                if (match && price === null) {
+                    price = parseFloat(match[1].replace(/,/g, ""));
+                }
+            });
+
+            const matches =
+                selectedRanges.length === 0 ||
+                selectedRanges.some(range => {
+                    const [min, max] = range.split("-").map(Number);
+                    return price !== null && price >= min && price <= max;
+                });
+
+            product.style.display = matches ? "" : "none";
+        });
+    }
+
+    priceCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener("change", filterProducts);
+    });
+});
+</script>
+<script>
+function updateCartCount() {
+    const cart = JSON.parse(
+        localStorage.getItem("supplyhive_cart") || "[]"
+    );
+
+    const count = cart.reduce(
+        (total, item) => total + (Number(item.quantity) || 0),
+        0
+    );
+
+    document.querySelectorAll("#cart-count").forEach(element => {
+        element.textContent = count > 0 ? count : "";
+        element.style.display = count > 0 ? "inline-block" : "none";
+    });
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    updateCartCount();
+
+    document.querySelectorAll(".product-card button").forEach(button => {
+        button.addEventListener("click", function () {
+            const product = button.closest(".product-card");
+            const name = product.querySelector("h3").textContent.trim();
+            const image = product.querySelector("img").getAttribute("src");
+
+            const priceText = Array.from(product.querySelectorAll("p"))
+                .map(p => p.textContent)
+                .find(text => /Rs\.\s*[\d,]+(?:\.\d+)?/.test(text));
+
+            const priceMatch = priceText?.match(
+                /Rs\.\s*([\d,]+(?:\.\d+)?)/
+            );
+
+            if (!priceMatch) {
+                alert("Product price not found!");
+                return;
+            }
+
+            const price = Number(priceMatch[1].replace(/,/g, ""));
+
+            let cart = JSON.parse(
+                localStorage.getItem("supplyhive_cart") || "[]"
+            );
+
+            const existingItem = cart.find(
+                item => item.name === name && item.image === image
+            );
+
+            if (existingItem) {
+                existingItem.quantity =
+                    (Number(existingItem.quantity) || 0) + 1;
+            } else {
+                cart.push({
+                    name: name,
+                    image: image,
+                    price: price,
+                    quantity: 1
+                });
+            }
+
+            localStorage.setItem(
+                "supplyhive_cart",
+                JSON.stringify(cart)
+            );
+
+            updateCartCount();
+
+            alert(name + " added to cart!");
+        });
+    });
+});
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const profileToggle = document.getElementById("profile-toggle");
+    const profileDropdown = document.getElementById("profile-dropdown");
+
+    if (!profileToggle || !profileDropdown) return;
+
+    profileToggle.addEventListener("click", function (event) {
+        event.stopPropagation();
+
+        const isOpening = profileDropdown.hidden;
+        profileDropdown.hidden = !isOpening;
+
+        profileToggle.setAttribute("aria-expanded", String(isOpening));
+    });
+
+    document.addEventListener("click", function (event) {
+        if (!event.target.closest(".profile-menu")) {
+            profileDropdown.hidden = true;
+            profileToggle.setAttribute("aria-expanded", "false");
+        }
+    });
+});
+</script>
+</body>
+</html>
+
+

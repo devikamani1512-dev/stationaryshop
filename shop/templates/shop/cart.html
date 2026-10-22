@@ -1,0 +1,567 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Cart - Supplyhive</title>
+
+    <link rel="stylesheet" href="{% static 'shop/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'shop/css/shop.css' %}">
+
+    <style>
+        /* CART CONTENT ONLY - HEADER AND FOOTER UNCHANGED */
+        .cart-page {
+            min-height: 450px;
+            padding: 25px 5%;
+            background: #d3e0f8;
+            color: #111;
+        }
+
+        .cart-page h1 {
+            margin: 0 0 35px;
+            text-align: center;
+            font-size: 35px;
+            font-weight: 500;
+        }
+
+        .cart-table-wrapper {
+            max-width: 900px;
+            margin: 0 auto 20px;
+            overflow-x: auto;
+            background: #fff;
+            border: 1px solid #b8c8df;
+            border-radius: 10px;
+        }
+
+        .cart-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        .cart-table th {
+            padding: 15px 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .cart-table td {
+            padding: 12px 10px;
+            vertical-align: middle;
+        }
+
+        .cart-product {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-align: left;
+        }
+
+        .cart-product img {
+            width: 100px;
+            height: 130px;
+            object-fit: contain;
+        }
+
+        .cart-product-name {
+            font-weight: 600;
+        }
+
+        .cart-product-price {
+            margin-top: 5px;
+            font-size: 14px;
+        }
+
+        .cart-quantity {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .cart-quantity button {
+            width: 30px;
+            height: 30px;
+            border: 1px solid #aaa;
+            background: #eaf2ff;
+            cursor: pointer;
+        }
+
+        .cart-remove {
+            display: block;
+            margin-top: 7px;
+            border: none;
+            background: transparent;
+            color: #c92020;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .cart-summary {
+            width: 280px;
+            margin: 0 max(calc((100% - 900px) / 2), 0px) 20px auto;
+        }
+
+        .cart-summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            padding: 12px;
+            border-radius: 7px;
+            background: #fff;
+            font-size: 15px;
+        }
+
+        .cart-total {
+            font-weight: 700;
+        }
+
+        .cart-checkout {
+            display: block;
+            margin: 18px auto;
+            padding: 10px 28px;
+            border: none;
+            border-radius: 20px;
+            background: #087cf5;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .cart-empty {
+            padding: 35px;
+            text-align: center;
+        }
+
+        .cart-continue {
+            display: inline-block;
+            margin-top: 10px;
+            color: #087cf5;
+            text-decoration: none;
+        }
+
+@media (max-width: 600px) {
+    .cart-page {
+        padding: 20px 10px;
+    }
+
+    .cart-page h1 {
+        margin-bottom: 22px;
+        font-size: 24px;
+    }
+
+    .cart-table-wrapper {
+        width: 100%;
+        overflow-x: hidden;
+    }
+
+    .cart-table {
+        width: 100%;
+        min-width: 0;
+        table-layout: fixed;
+        font-size: 12px;
+    }
+
+    .cart-table th {
+        padding: 10px 3px;
+        font-size: 12px;
+        overflow-wrap: anywhere;
+    }
+
+    .cart-table td {
+        padding: 8px 3px;
+        overflow-wrap: anywhere;
+    }
+
+    .cart-product {
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+        text-align: center;
+    }
+
+    .cart-product img {
+        width: 65px;
+        height: 75px;
+    }
+
+    .cart-product-name {
+        font-size: 12px;
+        overflow-wrap: anywhere;
+    }
+
+    .cart-product-price {
+        font-size: 11px;
+    }
+
+    .cart-quantity {
+        gap: 3px;
+    }
+
+    .cart-quantity button {
+        width: 24px;
+        height: 26px;
+        padding: 0;
+    }
+
+    .cart-remove {
+        font-size: 11px;
+    }
+
+    .cart-summary {
+        width: 100%;
+        margin: 0 auto 20px;
+    }
+
+    .cart-summary-row {
+        padding: 12px;
+        font-size: 14px;
+    }
+}
+
+        
+    </style>
+</head>
+
+<body>
+
+<!-- Existing Supplyhive Header -->
+<header class="site-header">
+    <div class="logo">
+        <img src="{% static 'shop/images/supplyhive_logo.png' %}"
+             alt="Supplyhive Logo">
+        <span>Supplyhive</span>
+    </div>
+
+    <nav class="navbar">
+        <a href="{% url 'home' %}">Home</a>
+        <a href="{% url 'shop_page' %}">Shop</a>
+        <a href="{% url 'about' %}">About us</a>
+        <a href="{% url 'contact' %}">Contact</a>
+        <a href="{% url 'login' %}">Login/Register</a>
+    </nav>
+
+    <form class="search-box" action="{% url 'shop_page' %}#products">
+        <input type="search"
+               placeholder="Search for Stationery"
+               aria-label="Search for stationery">
+        <button type="submit" aria-label="Search">⌕</button>
+    </form>
+
+    <div class="header-icons">
+        <a href="{% url 'cart' %}"
+   aria-label="Shopping cart"
+   class="icon-link cart-icon-link">
+
+    <img src="{% static 'shop/images/cart.jpeg' %}"
+         alt="Shopping Cart"
+         class="cart-image">
+
+    <span id="cart-count">0</span>
+</a>
+
+        <a href="#account" aria-label="My account" class="icon-link">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="12" cy="8" r="3.5" fill="none"
+                        stroke="currentColor" stroke-width="1.7"/>
+                <path d="M5 20c.5-4 3-6 7-6s6.5 2 7 6"
+                      fill="none" stroke="currentColor" stroke-width="1.7"
+                      stroke-linecap="round"/>
+            </svg>
+        </a>
+    </div>
+</header>
+
+<!-- Cart Content -->
+<main class="cart-page">
+
+    <h1>My Cart</h1>
+
+    <div class="cart-table-wrapper" id="cart-table-wrapper">
+        <table class="cart-table">
+           <thead>
+    <tr>
+        <th>Product</th>
+        <th>Quantity</th>
+        <th>Unit Price</th>
+        <th>Total Price</th>
+        <th>Checkout</th>
+    </tr>
+</thead>
+<tbody id="cart-items"></tbody>
+        </table>
+
+        <div id="cart-empty" class="cart-empty" style="display:none;">
+            Your cart is empty!
+            <br>
+            <a class="cart-continue" href="{% url 'shop_page' %}">
+                Continue Shopping
+            </a>
+        </div>
+    </div>
+
+    <div class="cart-summary">
+        <div class="cart-summary-row">
+            <span>Subtotal</span>
+            <span id="cart-subtotal">Rs. 0.00</span>
+        </div>
+
+        <div class="cart-summary-row cart-total">
+            <span>Total</span>
+            <span id="cart-total">Rs. 0.00</span>
+        </div>
+    </div>
+
+
+</main>
+
+<!-- Existing Supplyhive Footer -->
+<footer class="site-footer" id="contact">
+    <div class="footer-brand">
+        <img src="{% static 'shop/images/supplyhive_logo.png' %}"
+             alt="Supplyhive Logo" class="footer-logo">
+        <div>
+            <h3>Supplyhive</h3>
+            <p>2025 Supplyhive Limited</p>
+        </div>
+    </div>
+
+    <div class="footer-links">
+        <div class="footer-column">
+            <h4>Company</h4>
+            <a href="{% url 'about' %}">About us</a>
+            <a href="#corporate">Supplyhive corporate</a>
+            <a href="#careers">Careers</a>
+            <a href="#team">Team</a>
+        </div>
+
+        <div class="footer-column">
+            <h4>Contact us</h4>
+            <a href="#support">Help &amp; Support</a>
+            <a href="#partner">Partner with us</a>
+            <a href="#ride">Ride with us</a>
+        </div>
+
+        <div class="footer-column">
+            <h4>Available in</h4>
+            <a href="#coimbatore">Coimbatore</a>
+            <a href="#bengaluru">Bengaluru</a>
+            <a href="#chennai">Chennai</a>
+            <a href="#kolkata">Kolkata</a>
+        </div>
+
+        <div class="footer-column">
+            <h4>Legal</h4>
+            <a href="#terms">Terms &amp; Conditions</a>
+            <a href="#cookies">Cookie policy</a>
+            <a href="#privacy">Privacy Policy</a>
+        </div>
+
+        <div class="footer-column">
+            <h4>Information</h4>
+            <a href="#location">Location</a>
+            <a href="#email">Email</a>
+            <span>Social Media</span>
+
+            <div class="footer-socials">
+                <a href="#instagram" aria-label="Instagram">
+                    <img src="{% static 'shop/images/icon-instagram.png' %}" alt="Instagram">
+                </a>
+                <a href="#facebook" aria-label="Facebook">
+                    <img src="{% static 'shop/images/icon-facebook.png' %}" alt="Facebook">
+                </a>
+                <a href="#whatsapp" aria-label="WhatsApp">
+                    <img src="{% static 'shop/images/icon-whatsapp.png' %}" alt="WhatsApp">
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-app">
+        <p>For better experience, download the app now</p>
+
+        <div class="footer-app-buttons">
+            <a href="#google-play" class="app-button">
+                <img src="{% static 'shop/images/google-play.png' %}"
+                     alt="Google Play" class="app-store-icon">
+                <span>Get it on<br><strong>Google Play</strong></span>
+            </a>
+
+            <a href="#app-store" class="app-button">
+                <img src="{% static 'shop/images/app-store.png' %}"
+                     alt="App Store" class="app-store-icon">
+                <span>Download on the<br><strong>App Store</strong></span>
+            </a>
+        </div>
+    </div>
+</footer>
+
+<script>
+function getCart() {
+    try {
+        const cart = JSON.parse(
+            localStorage.getItem("supplyhive_cart") || "[]"
+        );
+
+        return Array.isArray(cart) ? cart : [];
+    } catch (error) {
+        console.error("Cart data error:", error);
+        return [];
+    }
+}
+
+function updateCartCount() {
+    const cart = getCart();
+    const count = cart.reduce((sum, item) => sum + (Number(item.quantity) || 0), 0);
+    document.getElementById("cart-count").textContent = count;
+}
+
+function renderCart() {
+    const cart = getCart();
+    const tbody = document.getElementById("cart-items");
+    const emptyMessage = document.getElementById("cart-empty");
+    const table = document.querySelector(".cart-table");
+    let subtotal = 0;
+
+    tbody.innerHTML = "";
+
+    if (cart.length === 0) {
+        table.style.display = "none";
+        emptyMessage.style.display = "block";
+    } else {
+        table.style.display = "table";
+        emptyMessage.style.display = "none";
+    }
+
+    cart.forEach((item, index) => {
+        const quantity = Number(item.quantity) || 1;
+        const price = Number(item.price) || 0;
+        const itemTotal = quantity * price;
+        subtotal += itemTotal;
+
+        const row = document.createElement("tr");
+
+        const productCell = document.createElement("td");
+        const product = document.createElement("div");
+        product.className = "cart-product";
+
+        const image = document.createElement("img");
+        image.src = item.image;
+        image.alt = item.name;
+
+        const productInfo = document.createElement("div");
+        const name = document.createElement("div");
+        name.className = "cart-product-name";
+        name.textContent = item.name;
+
+        const productPrice = document.createElement("div");
+        productPrice.className = "cart-product-price";
+        productPrice.textContent = "Rs. " + price.toFixed(2);
+
+        productInfo.append(name, productPrice);
+        product.append(image, productInfo);
+        productCell.appendChild(product);
+
+        const quantityCell = document.createElement("td");
+        const quantityControls = document.createElement("div");
+        quantityControls.className = "cart-quantity";
+
+        const minus = document.createElement("button");
+        minus.textContent = "−";
+        minus.onclick = () => changeQuantity(index, -1);
+
+        const quantityText = document.createElement("span");
+        quantityText.textContent = quantity;
+
+        const plus = document.createElement("button");
+        plus.textContent = "+";
+        plus.onclick = () => changeQuantity(index, 1);
+
+        quantityControls.append(minus, quantityText, plus);
+
+        const remove = document.createElement("button");
+        remove.className = "cart-remove";
+        remove.textContent = "Remove";
+        remove.onclick = () => removeProduct(index);
+
+        quantityCell.append(quantityControls, remove);
+
+        const priceCell = document.createElement("td");
+        priceCell.textContent = "Rs. " + price.toFixed(2);
+
+        const totalCell = document.createElement("td");
+        totalCell.textContent = "Rs. " + itemTotal.toFixed(2);
+        
+const checkoutCell = document.createElement("td");
+
+const checkoutButton = document.createElement("button");
+checkoutButton.type = "button";
+checkoutButton.className = "cart-checkout";
+checkoutButton.textContent = "Proceed to Checkout";
+checkoutButton.style.margin = "5px";
+checkoutButton.style.padding = "8px 12px";
+
+checkoutButton.onclick = () => proceedToCheckout(index);
+
+checkoutCell.appendChild(checkoutButton);
+
+        row.append(
+    productCell,
+    quantityCell,
+    priceCell,
+    totalCell,
+    checkoutCell
+);
+        tbody.appendChild(row);
+    });
+
+    document.getElementById("cart-subtotal").textContent = "Rs. " + subtotal.toFixed(2);
+    document.getElementById("cart-total").textContent = "Rs. " + subtotal.toFixed(2);
+
+    updateCartCount();
+}
+
+function changeQuantity(index, amount) {
+    const cart = getCart();
+    if (!cart[index]) return;
+
+    cart[index].quantity = (Number(cart[index].quantity) || 1) + amount;
+
+    if (cart[index].quantity <= 0) {
+        cart.splice(index, 1);
+    }
+
+    localStorage.setItem("supplyhive_cart", JSON.stringify(cart));
+    renderCart();
+}
+
+function removeProduct(index) {
+    const cart = getCart();
+    cart.splice(index, 1);
+    localStorage.setItem("supplyhive_cart", JSON.stringify(cart));
+    renderCart();
+}
+
+function proceedToCheckout(index) {
+    const cart = getCart();
+
+    if (!cart[index]) {
+        alert("Product not found in cart!");
+        return;
+    }
+
+    const selectedProduct = cart[index];
+
+    sessionStorage.setItem(
+        "supplyhive_selected_product",
+        JSON.stringify(selectedProduct)
+    );
+
+    window.location.href =
+        "{% url 'login' %}?next={% url 'checkout' %}";
+}
+document.addEventListener("DOMContentLoaded", renderCart);
+</script>
+
+</body>
+</html>

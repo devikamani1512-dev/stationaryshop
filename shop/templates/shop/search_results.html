@@ -1,0 +1,157 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results - Supplyhive</title>
+
+    <link rel="stylesheet" href="{% static 'shop/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'shop/css/shop.css' %}">
+
+    <style>
+        .search-results-container {
+            max-width: 1200px;
+            margin: 35px auto;
+            padding: 0 20px;
+        }
+
+        .search-results-container h1 {
+            text-align: center;
+            margin-bottom: 12px;
+        }
+
+        .search-summary {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .search-results-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 20px;
+        }
+
+        .search-results-grid .product-card {
+            min-width: 0;
+        }
+
+        .search-results-grid .product-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: contain;
+        }
+
+        .no-products-found {
+            text-align: center;
+            padding: 35px 15px;
+            grid-column: 1 / -1;
+        }
+
+        .back-to-shop {
+            display: inline-block;
+            margin-top: 15px;
+            color: #2463eb;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .search-results-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 480px) {
+            .search-results-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="site-header">
+    <div class="logo">
+        <a href="{% url 'home' %}">
+            <img src="{% static 'shop/images/supplyhive_logo.png' %}"
+                 alt="Supplyhive Logo">
+        </a>
+        <span>Supplyhive</span>
+    </div>
+
+    <nav class="navbar">
+        <a href="{% url 'home' %}">Home</a>
+        <a href="{% url 'shop_page' %}">Shop</a>
+        <a href="{% url 'about' %}">About us</a>
+        <a href="{% url 'contact' %}">Contact</a>
+    </nav>
+
+    <form class="search-box"
+          action="{% url 'global_product_search' %}"
+          method="get">
+        <input
+            type="search"
+            name="q"
+            placeholder="Search all products"
+            aria-label="Search all products"
+            value="{{ search_query }}"
+            required
+        >
+        <button type="submit" aria-label="Search">⌕</button>
+    </form>
+</header>
+
+<main class="search-results-container">
+
+    <h1>Search Results</h1>
+
+    {% if search_query %}
+        <p class="search-summary">
+            Results for "<strong>{{ search_query }}</strong>"
+            — {{ products|length }} product(s) found
+        </p>
+    {% endif %}
+
+    <div class="search-results-grid">
+
+        {% for product in products %}
+            <article class="product-card">
+
+                <a href="{% url 'product_details' product.slug %}">
+                    <img
+                        src="{% static product.image %}"
+                        alt="{{ product.name }}"
+                    >
+                </a>
+
+                <h3>{{ product.name }}</h3>
+
+                <div class="product-rating">★★★★★</div>
+
+                <p>Rs. {{ product.price }}</p>
+
+                <p>Buy 3 or more @ Rs. 101.20</p>
+
+                <button type="button">Add to Cart</button>
+
+            </article>
+
+        {% empty %}
+            <div class="no-products-found">
+                <h3>No products found</h3>
+                <p>Try another product name, such as Stapler, Notebook or File Folder.</p>
+                <a class="back-to-shop" href="{% url 'shop_page' %}">
+                    Browse Office Basics
+                </a>
+            </div>
+        {% endfor %}
+
+    </div>
+
+</main>
+
+</body>
+</html>

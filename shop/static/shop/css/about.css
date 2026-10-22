@@ -1,0 +1,554 @@
+
+/* About Us Page */
+.about-page,
+.about-footer {
+    width: 100%;
+    background: #d4e0f8;
+    color: #111;
+}
+
+.about-navbar {
+    min-height: 58px;
+    padding: 10px 3%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    background: #fff;
+}
+
+.about-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #111;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.about-brand img {
+    width: 36px;
+    height: 36px;
+    object-fit: contain;
+}
+
+.about-navbar nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 22px;
+}
+
+.about-navbar nav a {
+    color: #111;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.about-navbar nav a.active,
+.about-navbar nav a:hover {
+    color: #087cf0;
+}
+
+.about-page {
+    padding: 20px 4% 35px;
+}
+
+.about-hero-image {
+    display: block;
+    width: 240%;
+    height: 500px;
+    object-fit: cover;
+    border-radius: 12px;
+}
+
+.about-hero h1 {
+    margin: 25px 0 40px;
+    text-align: center;
+    font-size: clamp(20px, 2.5vw, 30px);
+    font-weight: 400;
+}
+
+.about-intro > p,
+.about-product-section > p,
+.about-team > p {
+    font-size: 18px;
+    line-height: 1.6;
+}
+
+.about-intro > p {
+    max-width: 900px;
+    margin: 0 auto 28px;
+    text-align: center;
+}
+
+.about-category-images {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+    margin-bottom: 45px;
+}
+
+.about-category-images img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 12px;
+}
+
+.about-product-section {
+    margin: 0 0 55px;
+}
+
+.about-product-section h2 {
+    margin-bottom: 18px;
+    font-size: 19px;
+    font-weight: 700;
+}
+
+.about-product-section > p {
+    margin-bottom: 22px;
+}
+
+.about-writing-images {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 25px;
+}
+
+.about-writing-images img {
+    display: block;
+    width: 100%;
+    height: 240px;
+    object-fit: contain;
+}
+
+.about-bags {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 35px;
+    margin-top: 25px;
+}
+
+.about-bags img {
+    width: 100%;
+    height: 360px;
+    object-fit: contain;
+}
+
+.about-essentials {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: center;
+    gap: 25px;
+}
+
+.about-essentials img {
+    width: 100%;
+    height: 250px;
+    object-fit: contain;
+}
+
+.about-team {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.about-team h2 {
+    font-size: 22px;
+    margin-bottom: 12px;
+}
+
+.about-team > p {
+    max-width: 900px;
+    margin: 0 auto 25px;
+}
+
+.about-team-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 30px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.about-team-card img {
+    width: 100%;
+    height: 190px;
+    object-fit: cover;
+    border-radius: 12px;
+}
+
+.about-team-card h3 {
+    margin: 12px 0 5px;
+    font-size: 18px;
+}
+
+.about-team-card p {
+    font-size: 15px;
+}
+
+/* =====================================
+   ABOUT PAGE FOOTER
+   ===================================== */
+
+.about-footer {
+    width: 100%;
+    padding: 30px 4% 25px;
+    background: var(--light-blue, #D3DFF8);
+    color: #111;
+    box-sizing: border-box;
+}
+
+/* FOOTER BRAND */
+
+.about-footer-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 45px;
+}
+
+.about-footer-brand > img {
+    width: 60px;
+    height: 60px;
+    flex-shrink: 0;
+    object-fit: contain;
+}
+
+.about-footer-brand h2 {
+    margin: 0 0 3px;
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.about-footer-brand p {
+    margin: 0;
+    font-size: 18px;
+}
+
+/* FOOTER LINKS */
+
+.about-footer-links {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 25px;
+    margin-bottom: 65px;
+}
+
+.about-footer-links > div {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-width: 0;
+}
+
+.about-footer-links h3 {
+    margin: 0 0 18px;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.about-footer-links a,
+.about-footer-links span {
+    display: block;
+    margin: 0 0 15px;
+    color: #71809A;
+    font-size: 16px;
+    line-height: 1.5;
+    text-decoration: none;
+}
+
+.about-footer-links a:hover {
+    color: #097AFA;
+}
+
+/* SOCIAL ICONS */
+
+.about-social-icons {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+    margin-top: 5px;
+}
+
+.about-social-icons a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+}
+
+.about-social-icons img {
+    display: block;
+    width: 45px;
+    height: 45px;
+    object-fit: contain;
+}
+
+/* APP DOWNLOAD SECTION */
+
+.about-app-download {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.about-app-download > p {
+    margin: 0;
+    font-size: 20px;
+}
+
+.about-app-buttons {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.about-app-buttons a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.about-app-buttons img {
+    display: block;
+    width: 155px;
+    max-width: 120%;
+    height: auto;
+    object-fit: contain;
+}
+
+/* TABLET */
+
+@media (max-width: 900px) {
+    .about-footer-links {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 30px 20px;
+    }
+
+    .about-app-download {
+        align-items: flex-start;
+    }
+}
+
+/* MOBILE */
+
+@media (max-width: 600px) {
+    .about-footer {
+        padding: 25px 16px;
+    }
+
+    .about-footer-brand {
+        margin-bottom: 35px;
+    }
+
+    .about-footer-brand > img {
+        width: 45px;
+        height: 45px;
+    }
+
+    .about-footer-brand h2 {
+        font-size: 22px;
+    }
+
+    .about-footer-brand p {
+        font-size: 14px;
+    }
+
+    .about-footer-links {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 25px 18px;
+        margin-bottom: 40px;
+    }
+
+    .about-footer-links h3 {
+        font-size: 14px;
+        margin-bottom: 12px;
+    }
+
+    .about-footer-links a,
+    .about-footer-links span {
+        font-size: 12px;
+        margin-bottom: 12px;
+        overflow-wrap: anywhere;
+    }
+
+    .about-social-icons {
+        gap: 10px;
+    }
+
+    .about-social-icons img {
+        width: 22px;
+        height: 22px;
+    }
+
+    .about-app-download {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+    }
+
+    .about-app-download > p {
+        font-size: 14px;
+    }
+
+    .about-app-buttons {
+        gap: 10px;
+    }
+
+    .about-app-buttons img {
+        width: 135px;
+    }
+}
+
+/* Tablet */
+@media (max-width: 768px) {
+    .about-navbar {
+        flex-direction: column;
+    }
+
+    .about-navbar nav {
+        gap: 14px;
+    }
+
+    .about-page {
+        padding: 16px 4% 25px;
+    }
+
+    .about-hero-image {
+        height: 220px;
+    }
+
+    .about-category-images {
+        gap: 10px;
+    }
+
+    .about-category-images img {
+        height: 110px;
+    }
+
+    .about-writing-images img {
+        height: 160px;
+    }
+
+    .about-bags img {
+        height: 220px;
+    }
+
+    .about-essentials img {
+        height: 160px;
+    }
+
+    .about-team-grid {
+        gap: 15px;
+    }
+
+    .about-team-card img {
+        height: 130px;
+    }
+
+    .about-footer-links {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 25px 18px;
+    }
+
+    .about-app-download {
+        justify-content: center;
+        text-align: center;
+    }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+    .about-navbar nav {
+        gap: 10px;
+    }
+
+    .about-navbar nav a {
+        font-size: 12px;
+    }
+
+    .about-hero-image {
+        height: 190px;
+    }
+
+    .about-hero h1 {
+        margin: 22px 0 30px;
+    }
+
+    .about-category-images {
+        gap: 8px;
+    }
+
+    .about-category-images img {
+        height: 85px;
+    }
+
+    .about-product-section {
+        margin-bottom: 38px;
+    }
+
+    .about-writing-images {
+        gap: 10px;
+    }
+
+    .about-writing-images img {
+        height: 120px;
+    }
+
+    .about-bags {
+        gap: 10px;
+    }
+
+    .about-bags img {
+        height: 170px;
+    }
+
+    .about-essentials {
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+    }
+
+    .about-essentials img {
+        height: 140px;
+    }
+
+    .about-team-grid {
+        gap: 10px;
+    }
+
+    .about-team-card img {
+        height: 95px;
+    }
+
+    .about-team-card h3 {
+        font-size: 12px;
+    }
+
+    .about-team-card p {
+        font-size: 11px;
+    }
+
+    .about-footer-links {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 25px 15px;
+    }
+
+    .about-app-buttons {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .about-app-buttons img {
+        width: 135px;
+    }
+}

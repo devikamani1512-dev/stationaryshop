@@ -1,0 +1,740 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment - Supplyhive</title>
+
+    <link rel="stylesheet" href="{% static 'shop/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'shop/css/shop.css' %}">
+
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            background: #f4f7fd;
+            color: #253752;
+            font-family: Arial, sans-serif;
+        }
+
+        .progress-wrapper {
+            max-width: 1100px;
+            margin: 32px auto 20px;
+            padding: 25px 20px;
+            background: #fff;
+            border: 1px solid #e3eaf5;
+            border-radius: 16px;
+            box-shadow: 0 5px 20px rgba(23,55,108,.05);
+        }
+
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            gap: 8px;
+        }
+
+        .progress-steps::before {
+            content: "";
+            position: absolute;
+            top: 18px;
+            left: 10%;
+            right: 10%;
+            height: 3px;
+            background: #dce5f3;
+            z-index: 0;
+        }
+
+        .progress-line {
+            position: absolute;
+            top: 18px;
+            left: 10%;
+            width: 20%;
+            height: 3px;
+            background: #2463eb;
+            z-index: 1;
+        }
+
+        .progress-step {
+            flex: 1;
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 9px;
+            font-size: 12px;
+            color: #7b8799;
+        }
+
+        .step-circle {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #e8eef8;
+            color: #64748b;
+            border: 3px solid #fff;
+            font-size: 15px;
+            font-weight: 700;
+            box-shadow: 0 0 0 1px #dce5f3;
+        }
+
+        .progress-step.completed .step-circle,
+        .progress-step.active .step-circle {
+            background: #2463eb;
+            color: #fff;
+            box-shadow: 0 0 0 1px #2463eb;
+        }
+
+        .progress-step.completed .step-circle {
+            background: #16834a;
+            box-shadow: 0 0 0 1px #16834a;
+        }
+
+        .progress-step.completed .step-label,
+        .progress-step.active .step-label {
+            color: #17376c;
+            font-weight: 700;
+        }
+
+        .payment-layout {
+            max-width: 1100px;
+            margin: 0 auto 55px;
+            padding: 0 16px;
+            display: grid;
+            grid-template-columns: minmax(0, 1.15fr) minmax(300px, .85fr);
+            gap: 25px;
+            align-items: start;
+        }
+
+        .payment-card,
+        .order-summary {
+            background: #fff;
+            border: 1px solid #e3eaf5;
+            border-radius: 16px;
+            padding: 28px;
+            box-shadow: 0 7px 25px rgba(23,55,108,.06);
+            min-width: 0;
+        }
+
+        .payment-card h1,
+        .order-summary h2 {
+            color: #17376c;
+            margin: 0 0 10px;
+        }
+
+        .payment-subtitle {
+            color: #64748b;
+            font-size: 14px;
+            line-height: 1.6;
+            margin: 0 0 22px;
+        }
+
+        .payment-option {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 17px;
+            margin: 14px 0;
+            border: 1px solid #d7e1f0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .payment-option:hover {
+            border-color: #2463eb;
+            background: #f8faff;
+        }
+
+        .payment-option:has(input:checked) {
+            border: 2px solid #2463eb;
+            background: #f0f6ff;
+            padding: 16px;
+        }
+
+        .payment-option input {
+            width: 18px;
+            height: 18px;
+            accent-color: #2463eb;
+            flex-shrink: 0;
+        }
+
+        .payment-option strong {
+            color: #17376c;
+            font-size: 15px;
+        }
+
+        .payment-option p {
+            margin: 5px 0 0;
+            color: #64748b;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .payment-details {
+            display: none;
+            padding: 20px;
+            margin: 12px 0 20px;
+            border: 1px solid #dce6f5;
+            border-radius: 12px;
+            background: #f8faff;
+        }
+
+        .payment-details.show { display: block; }
+
+        .payment-details h3 {
+            margin: 0 0 15px;
+            color: #17376c;
+            font-size: 17px;
+        }
+
+        .detail-field { margin-bottom: 15px; }
+        .detail-field:last-child { margin-bottom: 0; }
+
+        .detail-field label {
+            display: block;
+            margin-bottom: 7px;
+            color: #334155;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .detail-field input,
+        .detail-field select {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #cbd5e1;
+            border-radius: 9px;
+            background: #fff;
+            font-family: inherit;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .detail-field input:focus,
+        .detail-field select:focus {
+            border-color: #2463eb;
+            box-shadow: 0 0 0 3px rgba(36,99,235,.1);
+        }
+
+        .payment-hint {
+            color: #64748b;
+            font-size: 13px;
+            line-height: 1.6;
+            margin: 12px 0 0;
+        }
+
+        .payment-submit {
+            width: 100%;
+            min-height: 50px;
+            margin-top: 12px;
+            padding: 14px 18px;
+            border: none;
+            border-radius: 10px;
+            background: #2463eb;
+            color: white;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .payment-submit:hover { background: #174fc5; }
+
+        .payment-submit:disabled {
+            background: #94a3b8;
+            cursor: not-allowed;
+        }
+
+        .order-summary h2 {
+            font-size: 22px;
+            margin-bottom: 20px;
+        }
+
+        .payment-product {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px 0;
+            border-bottom: 1px solid #e5eaf2;
+        }
+
+        .payment-product img {
+            width: 72px;
+            height: 72px;
+            object-fit: contain;
+            border: 1px solid #e5eaf2;
+            border-radius: 10px;
+            background: #f8faff;
+            padding: 4px;
+            flex-shrink: 0;
+        }
+
+        .payment-product-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .payment-product-info strong {
+            color: #17376c;
+            overflow-wrap: anywhere;
+            font-size: 14px;
+        }
+
+        .payment-product-info p {
+            margin: 5px 0 0;
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        .product-subtotal {
+            color: #17376c;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+
+        .payment-total {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            margin-top: 20px;
+            padding-top: 18px;
+            border-top: 1px solid #dce5f3;
+            color: #17376c;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .secure-note {
+            margin-top: 20px;
+            padding: 12px;
+            border-radius: 9px;
+            background: #f0fdf4;
+            color: #166534;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .alert-message {
+            max-width: 700px;
+            margin: 12px auto;
+            padding: 12px 16px;
+            border-radius: 8px;
+            background: #fff7ed;
+            color: #9a3412;
+        }
+
+        @media (max-width: 800px) {
+            .payment-layout { grid-template-columns: 1fr; }
+            .progress-wrapper { margin: 20px 12px; }
+            .payment-layout { padding: 0 12px; }
+        }
+
+        @media (max-width: 500px) {
+            .progress-wrapper { padding: 18px 8px; }
+            .progress-step { font-size: 10px; gap: 7px; }
+            .step-circle {
+                width: 32px;
+                height: 32px;
+                font-size: 12px;
+            }
+            .progress-steps::before,
+            .progress-line { top: 15px; }
+            .payment-card,
+            .order-summary { padding: 21px 16px; }
+            .payment-card h1 { font-size: 24px; }
+        }
+    </style>
+</head>
+
+<body>
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert-message">{{ message }}</div>
+    {% endfor %}
+{% endif %}
+
+<!-- FIVE-STAGE PROGRESS BAR -->
+<section class="progress-wrapper">
+    <div class="progress-steps">
+        <div class="progress-line"></div>
+
+        <div class="progress-step completed">
+            <div class="step-circle">✓</div>
+            <span class="step-label">Checkout</span>
+        </div>
+
+        <div class="progress-step active">
+            <div class="step-circle">2</div>
+            <span class="step-label">Payment</span>
+        </div>
+
+        <div class="progress-step">
+            <div class="step-circle">3</div>
+            <span class="step-label">Paid / COD</span>
+        </div>
+
+        <div class="progress-step">
+            <div class="step-circle">4</div>
+            <span class="step-label">Confirmed</span>
+        </div>
+
+        <div class="progress-step">
+            <div class="step-circle">5</div>
+            <span class="step-label">Tracking</span>
+        </div>
+    </div>
+</section>
+
+<main class="payment-layout">
+
+    <section class="payment-card">
+        <h1>Choose Payment Method</h1>
+        <p class="payment-subtitle">
+            Select your preferred payment method to continue with your Supplyhive order.
+        </p>
+
+        <form method="post" id="payment-form">
+            {% csrf_token %}
+
+            <!-- UPI -->
+            <label class="payment-option">
+                <input type="radio" name="payment_method" value="UPI" required>
+                <span>
+                    <strong>UPI Payment</strong>
+                    <p>Google Pay, PhonePe and other UPI apps</p>
+                </span>
+            </label>
+
+            <div class="payment-details" id="upi-details">
+                <h3>UPI Details</h3>
+                <div class="detail-field">
+                    <label for="upi-id">UPI ID</label>
+                    <input type="text" id="upi-id" name="upi_id"
+                           placeholder="example@upi" autocomplete="off" disabled>
+                </div>
+                <p class="payment-hint">
+                    Demo form only. A real UPI payment requires a secure payment gateway.
+                    Do not enter sensitive payment information here.
+                </p>
+            </div>
+
+            <!-- CARD -->
+            <label class="payment-option">
+                <input type="radio" name="payment_method" value="CARD">
+                <span>
+                    <strong>Debit / Credit Card</strong>
+                    <p>Choose your bank card payment option</p>
+                </span>
+            </label>
+
+            <div class="payment-details" id="card-details">
+                <h3>Card Details</h3>
+
+                <div class="detail-field">
+                    <label for="card-name">Name on Card</label>
+                    <input type="text" id="card-name"
+                           placeholder="Name printed on card"
+                           autocomplete="off" disabled>
+                </div>
+
+                <div class="detail-field">
+                    <label for="card-number">Card Number</label>
+                    <input type="text" id="card-number" name="card_number"
+                           placeholder="1234 5678 9012 3456"
+                           inputmode="numeric" autocomplete="off"
+                           maxlength="19" disabled>
+                </div>
+
+                <p class="payment-hint">
+                    Demo form only. Do not enter real card details.
+                    A secure payment gateway is required for real payments.
+                </p>
+            </div>
+
+            <!-- NET BANKING -->
+            <label class="payment-option">
+                <input type="radio" name="payment_method" value="NETBANKING">
+                <span>
+                    <strong>Net Banking</strong>
+                    <p>Select a bank for demo payment</p>
+                </span>
+            </label>
+
+            <div class="payment-details" id="netbanking-details">
+                <h3>Net Banking</h3>
+
+                <div class="detail-field">
+                    <label for="bank-name">Select your bank</label>
+                    <select id="bank-name" name="bank_name" disabled>
+                        <option value="">Select Bank</option>
+                        <option value="SBI">State Bank of India</option>
+                        <option value="HDFC">HDFC Bank</option>
+                        <option value="ICICI">ICICI Bank</option>
+                        <option value="AXIS">Axis Bank</option>
+                        <option value="INDIAN">Indian Bank</option>
+                        <option value="CANARA">Canara Bank</option>
+                    </select>
+                </div>
+
+                <div class="detail-field">
+                    <label for="demo-user-id">Demo User ID</label>
+                    <input type="text" id="demo-user-id" name="demo_user_id"
+                           placeholder="Enter demo User ID"
+                           autocomplete="off" disabled>
+                </div>
+
+                <div class="detail-field">
+                    <label for="demo-password">Demo Password</label>
+                    <input type="password" id="demo-password" name="demo_password"
+                           placeholder="Enter demo password"
+                           autocomplete="off" disabled>
+                </div>
+
+                <p class="payment-hint">
+                    Demo only. Never enter your real bank User ID or password.
+                    No real payment will be made.
+                </p>
+            </div>
+
+            <!-- CASH ON DELIVERY -->
+            <label class="payment-option">
+                <input type="radio" name="payment_method" value="COD">
+                <span>
+                    <strong>Cash on Delivery</strong>
+                    <p>Pay when your order arrives at your address.</p>
+                </span>
+            </label>
+
+            <div class="payment-details" id="cod-details">
+                <h3>Cash on Delivery</h3>
+                <p class="payment-hint">
+                    You can pay when the order is delivered.
+                    Choose the button below to confirm your COD selection.
+                </p>
+            </div>
+
+            <button type="submit" class="payment-submit" id="payment-submit">
+                Continue
+            </button>
+        </form>
+    </section>
+
+    <!-- ORDER SUMMARY -->
+    <aside class="order-summary">
+        <h2>Your Order Summary</h2>
+
+        <div id="payment-products">
+            <p>Loading your cart items...</p>
+        </div>
+
+        <div class="payment-total">
+            <span>Total Amount</span>
+            <strong id="payment-total">₹0.00</strong>
+        </div>
+
+        <div class="secure-note">
+            🔒 Your delivery details were submitted during checkout.
+            Real online payments require a secure payment gateway.
+        </div>
+    </aside>
+
+</main>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    let cart = [];
+
+    try {
+        cart = JSON.parse(localStorage.getItem('supplyhive_cart') || '[]');
+        if (!Array.isArray(cart)) cart = [];
+    } catch (error) {
+        cart = [];
+    }
+
+    const productsContainer = document.getElementById('payment-products');
+    const totalElement = document.getElementById('payment-total');
+    const form = document.getElementById('payment-form');
+    const submitButton = document.getElementById('payment-submit');
+
+    const cardNumber = document.getElementById('card-number');
+    const cardName = document.getElementById('card-name');
+    const upiId = document.getElementById('upi-id');
+    const bankName = document.getElementById('bank-name');
+    const demoUserId = document.getElementById('demo-user-id');
+    const demoPassword = document.getElementById('demo-password');
+
+    // Display cart products and calculate total
+    if (!cart.length) {
+        productsContainer.textContent = 'Your cart is empty.';
+        totalElement.textContent = '₹0.00';
+        submitButton.disabled = true;
+    } else {
+        productsContainer.innerHTML = '';
+        let total = 0;
+
+        cart.forEach(function (item) {
+            const price = Number(item.price) || 0;
+            const quantity = Math.max(1, Number(item.quantity) || 1);
+            const subtotal = price * quantity;
+            total += subtotal;
+
+            const product = document.createElement('div');
+            product.className = 'payment-product';
+
+            const image = document.createElement('img');
+            image.src = item.image || '';
+            image.alt = item.name || 'Product';
+
+            const info = document.createElement('div');
+            info.className = 'payment-product-info';
+
+            const name = document.createElement('strong');
+            name.textContent = item.name || 'Product';
+
+            const qty = document.createElement('p');
+            qty.textContent = 'Quantity: ' + quantity;
+
+            const priceText = document.createElement('p');
+            priceText.textContent = 'Price: ₹' + price.toFixed(2);
+
+            info.append(name, qty, priceText);
+
+            const amount = document.createElement('strong');
+            amount.className = 'product-subtotal';
+            amount.textContent = '₹' + subtotal.toFixed(2);
+
+            product.append(image, info, amount);
+            productsContainer.appendChild(product);
+        });
+
+        totalElement.textContent = '₹' + total.toFixed(2);
+    }
+
+    const sections = {
+        UPI: document.getElementById('upi-details'),
+        CARD: document.getElementById('card-details'),
+        NETBANKING: document.getElementById('netbanking-details'),
+        COD: document.getElementById('cod-details')
+    };
+
+    function updatePaymentDetails() {
+        const selected = document.querySelector(
+            'input[name="payment_method"]:checked'
+        );
+
+        Object.keys(sections).forEach(function (method) {
+            const section = sections[method];
+            const active = selected && selected.value === method;
+
+            section.classList.toggle('show', Boolean(active));
+
+            section.querySelectorAll('input, select').forEach(function (field) {
+                field.disabled = !active;
+            });
+        });
+
+        submitButton.textContent =
+            !selected ? 'Continue' :
+            selected.value === 'COD' ? 'Confirm Cash on Delivery' :
+            'Continue with Payment';
+    }
+
+    // Format card number in groups of four digits
+    cardNumber.addEventListener('input', function () {
+        const digits = this.value.replace(/\D/g, '').slice(0, 16);
+        this.value = digits.match(/.{1,4}/g)?.join(' ') || '';
+    });
+
+    // Update fields when payment method changes
+    document.querySelectorAll('input[name="payment_method"]').forEach(function (radio) {
+        radio.addEventListener('change', updatePaymentDetails);
+    });
+
+    // Client-side validation
+    form.addEventListener('submit', function (event) {
+        const selected = document.querySelector(
+            'input[name="payment_method"]:checked'
+        );
+
+        if (!cart.length) {
+            event.preventDefault();
+            alert('Your cart is empty. Please add products first.');
+            return;
+        }
+
+        if (!selected) {
+            event.preventDefault();
+            alert('Please select a payment method.');
+            return;
+        }
+
+        if (selected.value === 'UPI') {
+            const value = upiId.value.trim();
+
+            if (!/^[\w.-]+@[\w.-]+$/.test(value)) {
+                event.preventDefault();
+                alert('Please enter a valid UPI ID.');
+                upiId.focus();
+                return;
+            }
+        }
+
+        if (selected.value === 'CARD') {
+            const digits = cardNumber.value.replace(/\D/g, '');
+
+            if (!cardName.value.trim()) {
+                event.preventDefault();
+                alert('Please enter the name on the card.');
+                cardName.focus();
+                return;
+            }
+
+            if (digits.length !== 16) {
+                event.preventDefault();
+                alert('Card number must contain exactly 16 digits.');
+                cardNumber.focus();
+                return;
+            }
+        }
+
+        if (selected.value === 'NETBANKING') {
+            if (!bankName.value) {
+                event.preventDefault();
+                alert('Please select your bank.');
+                bankName.focus();
+                return;
+            }
+
+            if (!demoUserId.value.trim()) {
+                event.preventDefault();
+                alert('Please enter a demo User ID.');
+                demoUserId.focus();
+                return;
+            }
+
+            if (!demoPassword.value.trim()) {
+                event.preventDefault();
+                alert('Please enter a demo password.');
+                demoPassword.focus();
+                return;
+            }
+        }
+
+        // Valid form submits to Django's existing payment() view.
+    });
+
+    updatePaymentDetails();
+});
+</script>
+
+</body>
+</html>
